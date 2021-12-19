@@ -1,5 +1,5 @@
 import pygame
-import random
+
 
 class Board:
     # создание поля
@@ -19,26 +19,30 @@ class Board:
         self.cell_size = cell_size
 
     def render(self, screen):
-        for i in range(self.width):
-            for j in range(self.height):
-                pygame.draw.rect(screen, (255, 255, 255),
-                                 (i * self.cell_size + self.left, j * self.cell_size + self.top, self.cell_size,
-                                  self.cell_size), 2)
+        for y in range(self.height):
+            for x in range(self.width):
+                pygame.draw.rect(screen, pygame.Color(255, 255, 255), (x * self.cell_size + self.left, y * self.cell_size + self.top, self.cell_size, self.cell_size), 1)
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        print('(' + str((int(event.pos[0]) - int(self.left)) // self.cell_size) + ', ' + str((int(event.pos[1]) - int(self.top)) // self.cell_size) + ')' if not ((int(event.pos[0]) - int(self.left)) // self.cell_size) < 0 and not ((int(event.pos[0]) - int(self.left)) // self.cell_size) >= self.width and not ((int(event.pos[1]) - int(self.top)) // self.cell_size) < 0 and not ((int(event.pos[1]) - int(self.top)) // self.cell_size) >= self.height else None)
+
+def main():
+    pygame.init()
+    size = 600, 600
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption('Инициализация игры')
+    board = Board(5, 7)
+    board.set_view(100, 100, 30)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        screen.fill((0, 0, 0))
+        board.render(screen)
+        pygame.display.flip()
+    pygame.quit()
 
 
-size = width, height = 800, 400
-screen = pygame.display.set_mode(size)
-board = Board(5, 7)
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = list(event.pos)
-            asd = width // pos[0]
-            print(asd)
-    screen.fill((0, 0, 0))
-    board.render(screen)
-    pygame.display.flip()
-#коментарий`
+if __name__ == '__main__':
+    main()
