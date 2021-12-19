@@ -1,5 +1,4 @@
 import pygame
-import math
 
 
 class Board:
@@ -25,16 +24,14 @@ class Board:
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 1)
 
     def get_cell(self, mouse_pos):
-        x = math.ceil((mouse_pos[0] - self.left) / self.cell_size) - 1
-        y = math.ceil((mouse_pos[1] - self.top) / self.cell_size) - 1
-        try:
-            if x >= 0 and y >= 0:
-                check = self.board[y][x]
-                return (x, y)
-            else:
-                return None
-        except IndexError:
-            return None
+        b_w = self.width * self.cell_size
+        b_h = self.height * self.cell_size
+        if self.left < mouse_pos[0] < self.left + b_w:
+            if self.top < mouse_pos[1] < self.top + b_h:
+                cell_coords = (mouse_pos[0] - self.top) // self.cell_size + 1, \
+                              (mouse_pos[1] - self.left) // self.cell_size + 1
+                return cell_coords
+        return None
 
     def on_click(self, cell_coords):
         pass
