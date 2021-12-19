@@ -21,7 +21,8 @@ class Board:
         cs = self.cell_size
         for y in range(self.height):
             for x in range(self.width):
-                pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 1)
+                pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 0)
+                pygame.draw.rect(screen, pygame.Color(0, 0, 0), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 1)
 
     def get_cell(self, mouse_pos):
         b_w = self.width * self.cell_size
@@ -34,7 +35,7 @@ class Board:
         return None
 
     def on_click(self, cell_coords):
-        pass
+        print(cell_coords)
 
     def get_click(self, mouse_pos):
         cell = self.get_cell(mouse_pos)
@@ -45,12 +46,12 @@ if __name__ == '__main__':
     pygame.init()
     pygame.display.set_caption('Игра')
 
-    size = width, height = 800, 800
+    size = width, height = 600, 555
     screen = pygame.display.set_mode(size)
-    screen.fill(pygame.Color("blue"))
-    x, y = 800, 800
+    screen.fill(pygame.Color("orange"))
+    x, y = 10, 10
     board = Board(x, y)
-    board.set_view(300, 300, 50)
+    board.set_view(50, 50, 50)
 
     running = True
     while running:
@@ -59,6 +60,6 @@ if __name__ == '__main__':
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 board.get_click(event.pos)
-        screen.fill((0, 0, 0))
+        screen.fill(pygame.Color("orange"))
         board.render(screen)
         pygame.display.flip()
