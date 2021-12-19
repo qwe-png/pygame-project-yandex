@@ -41,3 +41,4 @@ while running:
     screen.fill((0, 0, 0))
     board.render(screen)
     pygame.display.flip()
+#коментарий
