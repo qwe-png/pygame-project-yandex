@@ -55,6 +55,8 @@ class Board:
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 0)
                 pygame.draw.rect(screen, pygame.Color(0, 0, 0), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 1)
 
+        pygame.draw.rect(screen, (255, 255, 255), (0, 550, 600, 300), 0)
+
 
     def get_cell(self, mouse_pos):
         x = math.ceil((mouse_pos[0] - self.left) / self.cell_size) - 1
@@ -88,6 +90,7 @@ screen.fill(pygame.Color("orange"))
 x, y = 5, 5
 board = Board(x, y)
 board.set_view(100, 100, 80)
+
 
 while True:
 
