@@ -73,6 +73,9 @@ class Board:
 
     def on_click(self, cell_coords):
         print(cell_coords)
+        if cell_coords != None:
+            self.board[list(cell_coords)[0]][list(cell_coords)[1]] = 1
+            print(self.board[list(cell_coords)[0]][list(cell_coords)[1]])
 
 
     def get_click(self, mouse_pos):
