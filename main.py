@@ -29,6 +29,18 @@ def load_image(name, colorkey=None):
     image = pygame.image.load(fullname)
     return image
 
+all_sprites = pygame.sprite.Group()
+tower_group = pygame.sprite.Group()
+
+tower_image = load_image('tower.png')
+tower_width = tower_height = 80
+
+class Tower(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, left, top):
+        super().__init__(tower_group, all_sprites)
+        self.image = tower_image
+        self.rect = self.image.get_rect().move(
+            tower_width * pos_x + left, tower_height * pos_y + top)
 
 class Board:
     # создание поля
@@ -54,6 +66,10 @@ class Board:
             for x in range(self.width):
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 0)
                 pygame.draw.rect(screen, pygame.Color(0, 0, 0), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 1)
+                if self.board[y][x] >= 1:
+                    Tower(x, y, self.left, self.top)
+                    tower_group.draw(screen)
+
 
         pygame.draw.rect(screen, (255, 255, 255), (0, 550, 600, 300), 0)
 
@@ -74,8 +90,8 @@ class Board:
     def on_click(self, cell_coords):
         print(cell_coords)
         if cell_coords != None:
-            self.board[list(cell_coords)[0]][list(cell_coords)[1]] = 1
-            print(self.board[list(cell_coords)[0]][list(cell_coords)[1]])
+            self.board[list(cell_coords)[1]][list(cell_coords)[0]] += 1
+            print(self.board[list(cell_coords)[1]][list(cell_coords)[0]])
 
 
     def get_click(self, mouse_pos):
