@@ -2,6 +2,16 @@ import pygame
 import math
 import sys
 import os
+from random import randint
+
+from pygame.locals import *
+
+
+
+
+schetchik_ochkov_dlya_pokupki_bashen = 0
+randomazer = randint(0, 4)
+provershit = 10
 
 def terminate():
     #выход
@@ -35,12 +45,15 @@ tower_group = pygame.sprite.Group()
 tower_image = load_image('tower.png')
 tower_width = tower_height = 80
 
+
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         super().__init__(tower_group, all_sprites)
         self.image = tower_image
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
+        print(pos_x)
+
 
 class Board:
     # создание поля
@@ -66,9 +79,21 @@ class Board:
             for x in range(self.width):
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 0)
                 pygame.draw.rect(screen, pygame.Color(0, 0, 0), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 1)
+                if not provershit:
+                    pygame.draw.rect(screen, pygame.Color(0, 255, 255), (250, 500, 100, 490))
+                if provershit:
+                    pygame.draw.rect(screen, pygame.Color(0, 0, 255), (250, 500, 100, 490))
+                fontObj = pygame.font.Font(None, 60)
+
+                textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+                textRectObj = textSurfaceObj.get_rect()
+                textRectObj.center = (300, 525)
+                screen.blit(textSurfaceObj, textRectObj)
+
                 if self.board[y][x] >= 1:
                     Tower(x, y, self.left, self.top)
                     tower_group.draw(screen)
+
 
 
         pygame.draw.rect(screen, (255, 255, 255), (0, 550, 600, 300), 0)
@@ -88,7 +113,6 @@ class Board:
 
 
     def on_click(self, cell_coords):
-        print(cell_coords)
         if cell_coords != None:
             self.board[list(cell_coords)[1]][list(cell_coords)[0]] += 1
             print(self.board[list(cell_coords)[1]][list(cell_coords)[0]])
@@ -119,6 +143,16 @@ while True:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             board.get_click(event.pos)
+            if provershit:
+                schetchik_ochkov_dlya_pokupki_bashen += 10
+                print('asd')
+
+        if event.type == pygame.MOUSEMOTION:
+            if 250 <= int(event.pos[0]) <= 350 and 500 <= int(event.pos[1]) <= 550:
+                provershit = True
+            else:
+                provershit = False
+
 
     screen.fill(pygame.Color("orange"))
     board.render(screen)
