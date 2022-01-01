@@ -41,9 +41,49 @@ def load_image(name, colorkey=None):
 
 all_sprites = pygame.sprite.Group()
 tower_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 
 tower_image = load_image('tower.png')
 tower_width = tower_height = 80
+
+enemy_image = load_image("enemy.png")
+
+
+# TODO нужно сделать отображение здоровья и очков игрока
+class Player:
+    def __init__(self):
+        self.health = 10
+        self.points = 0
+
+
+# TODO нужно доделать класс ENEMY, понять, почему враг не рисуется
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(enemy_group, all_sprites)
+        self.x = 0
+        self.y = 0
+        self.image = enemy_image
+        self.rect = self.image.get_rect().move(self.x, self.y)
+
+        self.level = 0
+        self.health = 0
+        self.speed = 2
+
+    def update(self, *args):
+        if self.x == 10 and self.y > 10:
+            self.y -= self.speed / args[0]
+            self.rect = self.rect.move(self.x, self.y)
+        elif self.x == 10 and self.y <= 10:
+            self.x += self.speed / args[0]
+            self.rect = self.rect.move(self.x, self.y)
+        elif self. x >= 590 and self.y <= 10:
+            self.y += self.speed / args[0]
+            self.rect = self.rect.move(self.x, self.y)
+        else:
+            self.die()
+
+    def die(self):
+        self.kill()
 
 
 class Tower(pygame.sprite.Sprite):
@@ -92,7 +132,7 @@ class Board:
 
                 if self.board[y][x] >= 1:
                     Tower(x, y, self.left, self.top)
-                    tower_group.draw(screen)
+        tower_group.draw(screen)
 
 
 
@@ -134,9 +174,12 @@ x, y = 5, 5
 board = Board(x, y)
 board.set_view(100, 100, 80)
 
+fps = 60
+clock = pygame.time.Clock()
 
+en = Enemy()
 while True:
-
+    screen.fill(pygame.Color("orange"))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -152,8 +195,7 @@ while True:
                 provershit = True
             else:
                 provershit = False
-
-
-    screen.fill(pygame.Color("orange"))
     board.render(screen)
+    enemy_group.draw(screen)
+    # enemy_group.update(event, fps)
     pygame.display.flip()
