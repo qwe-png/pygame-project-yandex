@@ -49,11 +49,23 @@ tower_width = tower_height = 80
 enemy_image = load_image("enemy.png")
 
 
-# TODO нужно сделать отображение здоровья и очков игрока
 class Player:
     def __init__(self):
         self.health = 10
         self.points = 0
+
+    def draw(self):
+        font = pygame.font.Font(None, 30)
+
+        text = font.render(f"Жизни: {str(self.health)}", True, (100, 255, 100))
+        text_x = width - text.get_width() - 10
+        text_y = 10
+        screen.blit(text, (text_x, text_y))
+
+        text2 = font.render(f"Очки:{str(self.points)}", True, (100, 255, 100))
+        text_x2 = width - text2.get_width() - 10
+        text_y2 = text2.get_height() + 10
+        screen.blit(text2, (text_x2, text_y2))
 
 
 # TODO нужно доделать класс ENEMY, понять, почему враг не рисуется
@@ -118,11 +130,11 @@ class Board:
         for y in range(self.height):
             for x in range(self.width):
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 0)
-                pygame.draw.rect(screen, pygame.Color(0, 0, 0), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 1)
+                pygame.draw.rect(screen, pygame.Color(105, 105, 105), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 0)
                 if not provershit:
-                    pygame.draw.rect(screen, pygame.Color(0, 255, 255), (250, 500, 100, 490))
+                    pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 490))
                 if provershit:
-                    pygame.draw.rect(screen, pygame.Color(0, 0, 255), (250, 500, 100, 490))
+                    pygame.draw.rect(screen, pygame.Color(128, 128, 128), (250, 500, 100, 490))
                 fontObj = pygame.font.Font(None, 60)
 
                 textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
@@ -134,9 +146,6 @@ class Board:
                     Tower(x, y, self.left, self.top)
         tower_group.draw(screen)
 
-
-
-        pygame.draw.rect(screen, (255, 255, 255), (0, 550, 600, 300), 0)
 
 
     def get_cell(self, mouse_pos):
@@ -168,7 +177,7 @@ pygame.display.set_caption('Игра')
 
 size = width, height = 600, 800
 screen = pygame.display.set_mode(size)
-screen.fill(pygame.Color("orange"))
+screen.fill(pygame.Color("black"))
 
 x, y = 5, 5
 board = Board(x, y)
@@ -176,10 +185,9 @@ board.set_view(100, 100, 80)
 
 fps = 60
 clock = pygame.time.Clock()
-
-en = Enemy()
+player = Player()
 while True:
-    screen.fill(pygame.Color("orange"))
+    screen.fill(pygame.Color("black"))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -197,5 +205,6 @@ while True:
                 provershit = False
     board.render(screen)
     enemy_group.draw(screen)
+    player.draw()
     # enemy_group.update(event, fps)
     pygame.display.flip()
