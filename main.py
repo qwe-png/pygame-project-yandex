@@ -118,6 +118,7 @@ class Player:
             screen.blit(pustoe_serdce_image, (107, 600))
             screen.blit(pustoe_serdce_image, (130, 600))
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         global schetchik_kolichestva_serdec
@@ -184,7 +185,7 @@ class Tower(pygame.sprite.Sprite):
         self.image = tower_image
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
-	Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25)
+        Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25)
 
 
 class Board:
@@ -210,7 +211,6 @@ class Board:
         w = pygame.Color(255, 255, 255)
         cs = self.cell_size
         screen.blit(phon_igri_image, (0, 580))
-
 
         for z in range(7):
             screen.blit(path_image, (0, schetchik_kolichestva_dorozhek))
