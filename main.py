@@ -10,8 +10,17 @@ from pygame.locals import *
 
 
 schetchik_ochkov_dlya_pokupki_bashen = 0
+
 randomazer = randint(0, 4)
+
 provershit = 10
+
+schitatel = 0
+
+schetchik_kolichestva_dorozhek = 0
+
+schetchik_kolichestva_stenok = 0
+
 
 def terminate():
     #выход
@@ -39,14 +48,23 @@ def load_image(name, colorkey=None):
     image = pygame.image.load(fullname)
     return image
 
+
 all_sprites = pygame.sprite.Group()
+
 tower_group = pygame.sprite.Group()
+
 enemy_group = pygame.sprite.Group()
 
 tower_image = load_image('tower.png')
 tower_width = tower_height = 80
 
 enemy_image = load_image("enemy.png")
+
+path_image = load_image('path.png')
+
+wall_image = load_image('wall.png')
+
+rotated_wall_image = load_image('rotated_wall.png')
 
 
 class Player:
@@ -60,13 +78,15 @@ class Player:
         text = font.render(f"Жизни: {str(self.health)}", True, (100, 255, 100))
         text_x = width - text.get_width() - 10
         text_y = 10
+
         screen.blit(text, (text_x, text_y))
 
         text2 = font.render(f"Очки:{str(self.points)}", True, (100, 255, 100))
         text_x2 = width - text2.get_width() - 10
         text_y2 = text2.get_height() + 10
-        screen.blit(text2, (text_x2, text_y2))
 
+        screen.blit(text2, (text_x2, text_y2))
+#
 
 # TODO нужно доделать класс ENEMY, понять, почему враг не рисуется
 class Enemy(pygame.sprite.Sprite):
@@ -75,6 +95,7 @@ class Enemy(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.image = enemy_image
+
         self.rect = self.image.get_rect().move(self.x, self.y)
 
         self.level = 0
@@ -84,13 +105,22 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, *args):
         if self.x == 10 and self.y > 10:
             self.y -= self.speed / args[0]
+
             self.rect = self.rect.move(self.x, self.y)
+
+
         elif self.x == 10 and self.y <= 10:
             self.x += self.speed / args[0]
+
             self.rect = self.rect.move(self.x, self.y)
+
+
         elif self. x >= 590 and self.y <= 10:
             self.y += self.speed / args[0]
+
             self.rect = self.rect.move(self.x, self.y)
+
+
         else:
             self.die()
 
@@ -101,9 +131,13 @@ class Enemy(pygame.sprite.Sprite):
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         super().__init__(tower_group, all_sprites)
+
         self.image = tower_image
+
+
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
+
         print(pos_x)
 
 
@@ -112,40 +146,98 @@ class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
+
         self.board = [[0] * width for _ in range(height)]
+
         # значения по умолчанию
+
         self.set_view()
     # настройка внешнего вида
 
 
     def set_view(self, left=10, top=10, cell_size=30):
         self.left = left
+
         self.top = top
+
         self.cell_size = cell_size
 
 
     def render(self, screen):
-        w = pygame.Color(255, 255, 255)
+        schitatel = 0
+        schetchik_kolichestva_dorozhek = 0
+        schetchik_kolichestva_stenok = 77
+        w = pygame.Color(202, 228, 255)
         cs = self.cell_size
+
         for y in range(self.height):
             for x in range(self.width):
-                pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs, cs), 0)
-                pygame.draw.rect(screen, pygame.Color(105, 105, 105), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 0)
+                schitatel += 1
+
+                schetchik_kolichestva_dorozhek = 0
+
+                schetchik_kolichestva_stenok = 77
+
+                pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs + 1, cs + 1), 0)
+
+
+                if schitatel % 2 == 0:
+
+
+                    pygame.draw.rect(screen, pygame.Color(105, 105, 255),
+                                     (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 0)
+
+
+                else:
+                    pygame.draw.rect(screen, pygame.Color(155, 105, 205), (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 0)
+#№
+
+                for z in range(7):
+                    screen.blit(path_image, (0, schetchik_kolichestva_dorozhek))
+
+                    screen.blit(path_image, (522, schetchik_kolichestva_dorozhek))
+
+                    screen.blit(path_image, (schetchik_kolichestva_dorozhek, 0))
+
+                    schetchik_kolichestva_dorozhek += 78
+                for z in range(11):
+
+
+                    screen.blit(wall_image, (schetchik_kolichestva_stenok, 77))
+
+                    screen.blit(rotated_wall_image, (77, schetchik_kolichestva_stenok))
+
+                    screen.blit(rotated_wall_image, (501, schetchik_kolichestva_stenok))
+
+                    screen.blit(wall_image, (schetchik_kolichestva_stenok, 501))
+
+                    schetchik_kolichestva_stenok += 37
+
+
                 if not provershit:
-                    pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 490))
+                    pygame.draw.rect(screen, pygame.Color(105, 128, 155), (250, 501, 100, 50))
+
+
                 if provershit:
-                    pygame.draw.rect(screen, pygame.Color(128, 128, 128), (250, 500, 100, 490))
+                    pygame.draw.rect(screen, pygame.Color(128, 178, 128), (250, 501, 100, 50))
+
+
                 fontObj = pygame.font.Font(None, 60)
 
-                textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+                textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 255))
+
                 textRectObj = textSurfaceObj.get_rect()
+
                 textRectObj.center = (300, 525)
+
                 screen.blit(textSurfaceObj, textRectObj)
 
-                if self.board[y][x] >= 1:
-                    Tower(x, y, self.left, self.top)
-        tower_group.draw(screen)
 
+                if self.board[y][x] >= 1:
+
+                    Tower(x, y, self.left, self.top)
+
+        tower_group.draw(screen)
 
 
     def get_cell(self, mouse_pos):
