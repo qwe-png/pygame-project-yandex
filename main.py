@@ -10,6 +10,7 @@ provershit = 10
 schitatel = 0
 schetchik_kolichestva_dorozhek = 0
 schetchik_kolichestva_stenok = 0
+schetchik_kolichestva_serdec = 3
 
 
 def terminate():
@@ -75,15 +76,19 @@ tower_image = load_image('tower.png')
 enemy_image = load_image("enemy.png")
 path_image = load_image('path.png')
 wall_image = load_image('wall.png')
+phon_igri_image = load_image('phOn_igri.png')
 rotated_wall_image = load_image('rotated_wall.png')
+celoe_serdce_image = load_image('celoe_serdechko.png')
+pustoe_serdce_image = load_image('pustoe_serdechko.png')
 
 
 class Player:
     def __init__(self):
-        self.health = 10
+        self.health = 3
         self.points = 0
 
     def draw(self):
+        dvigatel_serdec_otnositelno_osi_X = 1
         font = pygame.font.Font(None, 30)
 
         text = font.render(f"Жизни: {str(self.health)}", True, (100, 255, 100))
@@ -94,11 +99,26 @@ class Player:
         text2 = font.render(f"Очки:{str(self.points)}", True, (100, 255, 100))
         text_x2 = width - text2.get_width() - 10
         text_y2 = text2.get_height() + 10
-        screen.blit(text2, (text_x2, text_y2))
-
+        if self.health == 3:
+            screen.blit(celoe_serdce_image, (84, 600))
+            screen.blit(celoe_serdce_image, (107, 600))
+            screen.blit(celoe_serdce_image, (130, 600))
+        if self.health == 2:
+            screen.blit(celoe_serdce_image, (84, 600))
+            screen.blit(celoe_serdce_image, (107, 600))
+            screen.blit(pustoe_serdce_image, (130, 600))
+        if self.health == 1:
+            screen.blit(celoe_serdce_image, (84, 600))
+            screen.blit(pustoe_serdce_image, (107, 600))
+            screen.blit(pustoe_serdce_image, (130, 600))
+        if self.health == 0:
+            screen.blit(pustoe_serdce_image, (84, 600))
+            screen.blit(pustoe_serdce_image, (107, 600))
+            screen.blit(pustoe_serdce_image, (130, 600))
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
+        global schetchik_kolichestva_serdec
         super().__init__(enemy_group, all_sprites)
         self.image = enemy_image
         self.image_copy = enemy_image
@@ -171,6 +191,8 @@ class Board:
         schetchik_kolichestva_stenok = 77
         w = pygame.Color(255, 255, 255)
         cs = self.cell_size
+        screen.blit(phon_igri_image, (0, 580))
+
 
         for z in range(7):
             screen.blit(path_image, (0, schetchik_kolichestva_dorozhek))
@@ -239,7 +261,7 @@ class Board:
 pygame.init()
 pygame.display.set_caption('Игра')
 
-size = width, height = 600, 800
+size = width, height = 600, 700
 screen = pygame.display.set_mode(size)
 screen.fill(pygame.Color("black"))
 
