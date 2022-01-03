@@ -69,6 +69,7 @@ def load_image(name):
 all_sprites = pygame.sprite.Group()
 tower_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
 
 tower_width = tower_height = 80
 tower_image = load_image('tower.png')
@@ -76,6 +77,7 @@ enemy_image = load_image("enemy.png")
 path_image = load_image('path.png')
 wall_image = load_image('wall.png')
 rotated_wall_image = load_image('rotated_wall.png')
+bullet_image = load_image("bullet.png")
 
 
 class Player:
@@ -141,12 +143,31 @@ class Enemy(pygame.sprite.Sprite):
         player.points += 1
 
 
+class Ball(pygame.sprite.Sprite):
+    def __init__(self, radius, x, y):
+        super().__init__(bullets)
+        self.radius = radius
+        self.image = bullet_image
+        self.rect = pygame.Rect(x, y, 2 * radius, 2 * radius)
+        self.vx = -5
+        self.vy = 5
+
+    def update(self):
+        self.rect = self.rect.move(self.vx, self.vy)
+        if pygame.sprite.spritecollideany(self, enemy_group):
+            print("произошло столкновение")
+
+
+
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         super().__init__(tower_group, all_sprites)
+        self.pos_x = pos_x
+        self.pos_y = pos_y
         self.image = tower_image
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
+        Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25)
 
 
 class Board:
@@ -272,12 +293,11 @@ while True:
             else:
                 provershit = False
     board.render(screen)
-
     tower_group.draw(screen)
     enemy_group.draw(screen)
+    bullets.draw(screen)
+    bullets.update()
     player.draw()
-
     enemy_group.update(fps)
-
     clock.tick(fps)
     pygame.display.flip()
