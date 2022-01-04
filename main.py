@@ -11,6 +11,10 @@ schitatel = 0
 schetchik_kolichestva_dorozhek = 0
 schetchik_kolichestva_stenok = 0
 schetchik_kolichestva_serdec = 3
+bul_pos = []
+tow = 0
+c = 0
+liv = False
 
 
 def terminate():
@@ -126,7 +130,7 @@ class Player:
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
-        global schetchik_kolichestva_serdec
+        global schetchik_kolichestva_serdec, liv
         super().__init__(enemy_group, all_sprites)
         self.image = enemy_image
         self.image_copy = enemy_image
@@ -135,7 +139,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(
             self.x, self.y)
-
+        liv = True
         self.level = 0
         self.health = 0
         self.speed = 200
@@ -161,11 +165,15 @@ class Enemy(pygame.sprite.Sprite):
             self.end()
 
     def end(self):
+        global liv
         self.kill()
+        liv = False
         player.health -= 1
 
     def killed(self):
+        global liv
         self.kill()
+        liv = False
         player.points += 1
 
 
@@ -176,21 +184,31 @@ class Ball(pygame.sprite.Sprite):
         self.image = bullet_image
         self.rect = pygame.Rect(x, y, 2 * radius, 2 * radius)
         self.vx = -5
-        self.vy = 5
+        self.vy = 0
 
     def update(self):
         self.rect = self.rect.move(self.vx, self.vy)
         if pygame.sprite.spritecollideany(self, enemy_group):
-            print("произошло столкновение")
+            pygame.sprite.spritecollide(self, enemy_group, bullets)
+            self.dis()
+            Enemy().killed()
+
+    def dis(self):
+        self.kill()
 
 
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         super().__init__(tower_group, all_sprites)
+        global tow
+        tow += 1
+        print(tow)
         self.image = tower_image
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
         Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25)
+        bul_pos.append([tower_width * pos_x + left + 25, tower_height * pos_y + top + 25])
+        print(bul_pos)
 
 
 class Board:
@@ -317,13 +335,16 @@ while True:
             else:
                 provershit = False
     board.render(screen)
-
+    c += 1
+    if c % 50 == 0 and (liv is True):
+        for q in range(tow):
+            for n in range(len(bul_pos)):
+                Ball(10, bul_pos[n][0], bul_pos[n][1])
     tower_group.draw(screen)
     enemy_group.draw(screen)
     player.draw()
     bullets.draw(screen)
     bullets.update()
     enemy_group.update(fps)
-
     clock.tick(fps)
     pygame.display.flip()
