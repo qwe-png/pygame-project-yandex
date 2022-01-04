@@ -13,6 +13,7 @@ schetchik_kolichestva_stenok = 0
 schetchik_kolichestva_serdec = 3
 bul_pos = []
 tow = 0
+global c
 c = 0
 liv = False
 
@@ -25,6 +26,50 @@ def terminate():
 
 def start_screen():
     intro_text = ["НАЖМИТЕ ЛКМ ЧТОБЫ НАЧАТЬ"]
+
+    fon = pygame.transform.scale(load_image('fon.jpg'), (width, height))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('white'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
+                return
+        pygame.display.flip()
+        clock.tick(60)
+
+def end():
+    end_screen()
+    for i in enemy_group:
+        i.kill()
+    for i in bullets:
+        i.kill()
+    for i in tower_group:
+        i.kill()
+
+    player.points = 10
+    player.health = 3
+
+    for y in range(board.height):
+        for x in range(board.width):
+            board.board[y][x] = 0
+
+
+
+def end_screen():
+    intro_text = ["НАЖМИТЕ ПКМ, ЧТОБЫ НАЧАТЬ ЗАНОВО"]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (width, height))
     screen.blit(fon, (0, 0))
@@ -197,6 +242,7 @@ class Ball(pygame.sprite.Sprite):
         self.kill()
 
 
+
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         super().__init__(tower_group, all_sprites)
@@ -318,6 +364,7 @@ player = Player()
 
 while True:
     screen.fill(pygame.Color("black"))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -334,7 +381,10 @@ while True:
                 provershit = True
             else:
                 provershit = False
+
     board.render(screen)
+
+    # проверки
     c += 1
     if c % 50 == 0 and (liv is True):
         # здесь можно поменять скорострельность башенки
@@ -342,11 +392,22 @@ while True:
         for q in range(tow):
             for n in range(len(bul_pos)):
                 Ball(10, bul_pos[n][0], bul_pos[n][1])
+
+    if player.health <= 0:
+        end()
+        c = 0
+        liv = False
+        bul_pos = []
+        tow = 0
+    # отрисовка
     tower_group.draw(screen)
     enemy_group.draw(screen)
     player.draw()
     bullets.draw(screen)
+
+    # обновление
     bullets.update()
     enemy_group.update(fps)
+
     clock.tick(fps)
     pygame.display.flip()
