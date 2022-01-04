@@ -140,7 +140,6 @@ class Player:
         self.points = 10
 
     def draw(self):
-        dvigatel_serdec_otnositelno_osi_X = 1
         font = pygame.font.Font(None, 30)
 
         text = font.render(f"Жизни: {str(self.health)}", True, (100, 255, 100))
