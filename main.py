@@ -337,6 +337,8 @@ while True:
     board.render(screen)
     c += 1
     if c % 50 == 0 and (liv is True):
+        # здесь можно поменять скорострельность башенки
+        # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
         for q in range(tow):
             for n in range(len(bul_pos)):
                 Ball(10, bul_pos[n][0], bul_pos[n][1])
