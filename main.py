@@ -81,13 +81,14 @@ phon_igri_image = load_image('phOn_igri.png')
 rotated_wall_image = load_image('rotated_wall.png')
 celoe_serdce_image = load_image('celoe_serdechko.png')
 pustoe_serdce_image = load_image('pustoe_serdechko.png')
+valuta_image = load_image('valuta.png')
 bullet_image = load_image("bullet.png")
 
 
 class Player:
     def __init__(self):
         self.health = 3
-        self.points = 0
+        self.points = 10
 
     def draw(self):
         dvigatel_serdec_otnositelno_osi_X = 1
@@ -99,8 +100,12 @@ class Player:
         screen.blit(text, (text_x, text_y))
 
         text2 = font.render(f"Очки:{str(self.points)}", True, (100, 255, 100))
-        text_x2 = width - text2.get_width() - 10
-        text_y2 = text2.get_height() + 10
+        fontObj = pygame.font.Font(None, 50)
+        textSurfaceObj = fontObj.render(str(self.points), True, (0, 255, 255))
+        textRectObj = textSurfaceObj.get_rect()
+        textRectObj.center = (365, 613)
+        screen.blit(textSurfaceObj, textRectObj)
+
         if self.health == 3:
             screen.blit(celoe_serdce_image, (84, 600))
             screen.blit(celoe_serdce_image, (107, 600))
@@ -211,7 +216,7 @@ class Board:
         w = pygame.Color(255, 255, 255)
         cs = self.cell_size
         screen.blit(phon_igri_image, (0, 580))
-
+        screen.blit(valuta_image, (510, 595))
         for z in range(7):
             screen.blit(path_image, (0, schetchik_kolichestva_dorozhek))
             screen.blit(path_image, (522, schetchik_kolichestva_dorozhek))
