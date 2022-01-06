@@ -20,6 +20,8 @@ liv = False
 pole_zipper = list(zip())
 nomer_polya = 0
 nomer_pole_csv = open('pole_nomer.csv', encoding='utf8').read()
+nomer_path_csv = open('path_nomer.csv', encoding='utf8').read()
+nomer_path = int(nomer_path_csv)
 samo_pole_csv = open('pole.csv', encoding='utf8')
 pole_colour = csv.reader(samo_pole_csv, delimiter=';', quotechar='"')
 for i in pole_colour:
@@ -129,7 +131,10 @@ bullets = pygame.sprite.Group()
 tower_width = tower_height = 80
 tower_image = load_image('tower.png')
 enemy_image = load_image("enemy.png")
+path2_image = load_image('path2.jpg')
 path_image = load_image('path.png')
+path3_image = load_image('path3.jpg')
+path4_image = load_image('path4.png')
 wall_image = load_image('wall.png')
 phon_igri_image = load_image('phOn_igri.png')
 rotated_wall_image = load_image('rotated_wall.png')
@@ -285,11 +290,30 @@ class Board:
         cs = self.cell_size
         screen.blit(phon_igri_image, (0, 580))
         screen.blit(valuta_image, (510, 595))
-        for z in range(7):
-            screen.blit(path_image, (0, schetchik_kolichestva_dorozhek))
-            screen.blit(path_image, (522, schetchik_kolichestva_dorozhek))
-            screen.blit(path_image, (schetchik_kolichestva_dorozhek, 0))
-            schetchik_kolichestva_dorozhek += 78
+        if nomer_path == 0:
+            for z in range(7):
+                screen.blit(path_image, (0, schetchik_kolichestva_dorozhek))
+                screen.blit(path_image, (522, schetchik_kolichestva_dorozhek))
+                screen.blit(path_image, (schetchik_kolichestva_dorozhek, 0))
+                schetchik_kolichestva_dorozhek += 78
+        if nomer_path == 1:
+            for z in range(7):
+                screen.blit(path2_image, (0, schetchik_kolichestva_dorozhek))
+                screen.blit(path2_image, (522, schetchik_kolichestva_dorozhek))
+                screen.blit(path2_image, (schetchik_kolichestva_dorozhek, 0))
+                schetchik_kolichestva_dorozhek += 78
+        if nomer_path == 2:
+            for z in range(7):
+                screen.blit(path3_image, (0, schetchik_kolichestva_dorozhek))
+                screen.blit(path3_image, (522, schetchik_kolichestva_dorozhek))
+                screen.blit(path3_image, (schetchik_kolichestva_dorozhek, 0))
+                schetchik_kolichestva_dorozhek += 78
+        if nomer_path == 3:
+            for z in range(7):
+                screen.blit(path4_image, (0, schetchik_kolichestva_dorozhek))
+                screen.blit(path4_image, (522, schetchik_kolichestva_dorozhek))
+                screen.blit(path4_image, (schetchik_kolichestva_dorozhek, 0))
+                schetchik_kolichestva_dorozhek += 78
 
         for z in range(11):
             screen.blit(wall_image, (schetchik_kolichestva_stenok, 77))

@@ -30,10 +30,10 @@ provershit = open('pole_nomer.csv', encoding='utf8').read()
 provershit = int(provershit)
 clock = pygame.time.Clock()
 phon_image = load_image('background.png')
-path1_image = load_image('pole_1.png')
-path2_image = load_image('pole_2.png')
-path3_image = load_image('pole_3.png')
-path4_image = load_image('pole_4.png')
+path1_image = load_image('path_big.png')
+path2_image = load_image('big_path2.jpg')
+path3_image = load_image('big_path3.jpg')
+path4_image = load_image('big_path4.png')
 accept_btn = load_image('accept_btn.png')
 strelka = load_image('strelka.png')
 nazad_v_menu = False
@@ -60,7 +60,7 @@ while running:
                 if provershit == 4:
                     provershit = 0
             if 144 < int(event.pos[0]) < 561 and 580 < int(event.pos[1]) < 654:
-                open('pole_nomer.csv', 'w').write(str(provershit))
+                open('path_nomer.csv', 'w').write(str(provershit))
                 running = False
                 nazad_v_menu = True
 
