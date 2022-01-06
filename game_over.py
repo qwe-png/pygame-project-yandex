@@ -73,15 +73,13 @@ while banan:
         pygame.display.flip()
 
 def rin(runfile):
-  with open(runfile,"r") as rnf:
-    exec(rnf.read())
+    with open(runfile,"r") as rnf:
+        exec(rnf.read())
+
 
 if play_again_btn:
-    import main
+    # import main
     play_again_btn = False
-
-if v_menu_btn:
+elif v_menu_btn:
     rin('main_menu.py')
     v_menu_btn = False
-
-

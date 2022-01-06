@@ -348,12 +348,19 @@ class Board:
                 screen.blit(wall4_image, (schetchik_kolichestva_stenok, 501))
                 schetchik_kolichestva_stenok += 37
 
+        if not provershit:
+            pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 60))
+        if provershit:
+            pygame.draw.rect(screen, pygame.Color(128, 128, 128), (250, 500, 100, 60))
+        fontObj = pygame.font.Font(None, 60)
+        textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+        textRectObj = textSurfaceObj.get_rect()
+        textRectObj.center = (300, 525)
+        screen.blit(textSurfaceObj, textRectObj)
 
         for y in range(self.height):
             for x in range(self.width):
                 schitatel += 1
-                schetchik_kolichestva_dorozhek = 0
-                schetchik_kolichestva_stenok = 77
 
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs + 1, cs + 1), 0)
 
@@ -363,16 +370,6 @@ class Board:
                 else:
                     pygame.draw.rect(screen, pygame.Color(perviy_vtorogo, vtoroy_vtorogo, tretiy_vtorogo),
                                      (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1))
-
-                if not provershit:
-                    pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 60))
-                if provershit:
-                    pygame.draw.rect(screen, pygame.Color(128, 128, 128), (250, 500, 100, 60))
-                fontObj = pygame.font.Font(None, 60)
-                textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
-                textRectObj = textSurfaceObj.get_rect()
-                textRectObj.center = (300, 525)
-                screen.blit(textSurfaceObj, textRectObj)
 
                 if self.board[y][x] == 1:
                     Tower(x, y, self.left, self.top)
@@ -449,7 +446,26 @@ while True:
                 Ball(10, bul_pos[n][0], bul_pos[n][1])
 
     if player.health <= 0:
+        # TODO понять почему при повторном начале игры наичанет лагать
         exec(open("game_over.py").read())
+        player.health = 3
+        player.points = 10
+        bul_pos = []
+        c = 0
+        tow = 0
+        liv = False
+        for i in tower_group:
+            i.kill()
+        for i in bullets:
+            i.kill()
+        for i in enemy_group:
+            i.kill()
+        for y in range(5):
+            for x in range(5):
+                board.board[y][x] = 0
+        size = width, height = 600, 700
+        screen = pygame.display.set_mode(size)
+
 
     # отрисовка
     tower_group.draw(screen)

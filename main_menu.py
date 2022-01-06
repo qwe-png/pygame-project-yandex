@@ -60,14 +60,12 @@ while banan:
         pygame.display.flip()
 
 def rin(runfile):
-  with open(runfile, "r") as rnf:
-    exec(rnf.read())
+    with open(runfile, "r") as rnf:
+        exec(rnf.read())
 
 if store_btn:
     rin('store.py')
     store_btn = False
-
-if play_btn:
+elif play_btn:
     import main
     play_btn = False
-
