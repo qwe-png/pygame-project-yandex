@@ -36,6 +36,7 @@ nadpis_image = load_image('store_opisanie.png')
 nazad_v_menu = False
 perehod_v_pole_changer = False
 perehod_v_path_changer = False
+perehod_v_wall_changer = False
 while running:
     screen.fill('white')
     screen.blit(phon_image, (x, y))
@@ -56,6 +57,9 @@ while running:
             if 192 < int(event.pos[0]) < 476 and 205 < int(event.pos[1]) < 259:
                 running = False
                 perehod_v_path_changer = True
+            if 192 < int(event.pos[0]) < 476 and 279 < int(event.pos[1]) < 330:
+                running = False
+                perehod_v_wall_changer = True
 
     clock.tick(fps)
     pygame.display.flip()
@@ -68,3 +72,6 @@ if perehod_v_pole_changer:
 if perehod_v_path_changer:
     exec(open("path_changer.py").read())
     perehod_v_path_changer = False
+if perehod_v_wall_changer:
+    exec(open("wall_changer.py").read())
+    perehod_v_wall_changer = False

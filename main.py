@@ -21,21 +21,20 @@ pole_zipper = list(zip())
 nomer_polya = 0
 nomer_pole_csv = open('pole_nomer.csv', encoding='utf8').read()
 nomer_path_csv = open('path_nomer.csv', encoding='utf8').read()
+nomer_wall_csv = open('wall_nomer.csv', encoding='utf8').read()
+nomer_wall = int(nomer_wall_csv)
 nomer_path = int(nomer_path_csv)
 samo_pole_csv = open('pole.csv', encoding='utf8')
 pole_colour = csv.reader(samo_pole_csv, delimiter=';', quotechar='"')
 for i in pole_colour:
     pole_zipper.append(i)
 nomer_polya = int(nomer_pole_csv)
-print(nomer_polya)
-print(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[0])
 perviy_pervogo = int(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[0])
 vtoroy_pervogo = int(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[1])
 tretiy_pervogo = int(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[2])
 perviy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[0])
 vtoroy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[1])
 tretiy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[2])
-print(perviy_vtorogo, vtoroy_pervogo, tretiy_pervogo)
 samo_pole_csv.close()
 
 def terminate():
@@ -136,8 +135,14 @@ path_image = load_image('path.png')
 path3_image = load_image('path3.jpg')
 path4_image = load_image('path4.png')
 wall_image = load_image('wall.png')
+wall2_image = load_image('wall2.png')
+wall3_image = load_image('wall3.png')
+wall4_image = load_image('wall4.png')
 phon_igri_image = load_image('phOn_igri.png')
 rotated_wall_image = load_image('rotated_wall.png')
+rotated_wall2_image = load_image('rotated_wall2.png')
+rotated_wall3_image = load_image('rotated_wall3.png')
+rotated_wall4_image = load_image('rotated_wall4.png')
 celoe_serdce_image = load_image('celoe_serdechko.png')
 pustoe_serdce_image = load_image('pustoe_serdechko.png')
 valuta_image = load_image('valuta.png')
@@ -314,13 +319,35 @@ class Board:
                 screen.blit(path4_image, (522, schetchik_kolichestva_dorozhek))
                 screen.blit(path4_image, (schetchik_kolichestva_dorozhek, 0))
                 schetchik_kolichestva_dorozhek += 78
+        if nomer_wall == 0:
+            for z in range(11):
+                screen.blit(wall_image, (schetchik_kolichestva_stenok, 77))
+                screen.blit(rotated_wall_image, (77, schetchik_kolichestva_stenok))
+                screen.blit(rotated_wall_image, (501, schetchik_kolichestva_stenok))
+                screen.blit(wall_image, (schetchik_kolichestva_stenok, 501))
+                schetchik_kolichestva_stenok += 37
+        if nomer_wall == 1:
+            for z in range(11):
+                screen.blit(wall2_image, (schetchik_kolichestva_stenok, 77))
+                screen.blit(rotated_wall2_image, (77, schetchik_kolichestva_stenok))
+                screen.blit(rotated_wall2_image, (501, schetchik_kolichestva_stenok))
+                screen.blit(wall2_image, (schetchik_kolichestva_stenok, 501))
+                schetchik_kolichestva_stenok += 37
+        if nomer_wall == 2:
+            for z in range(11):
+                screen.blit(wall3_image, (schetchik_kolichestva_stenok, 77))
+                screen.blit(rotated_wall3_image, (77, schetchik_kolichestva_stenok))
+                screen.blit(rotated_wall3_image, (501, schetchik_kolichestva_stenok))
+                screen.blit(wall3_image, (schetchik_kolichestva_stenok, 501))
+                schetchik_kolichestva_stenok += 37
+        if nomer_wall == 3:
+            for z in range(11):
+                screen.blit(wall4_image, (schetchik_kolichestva_stenok, 77))
+                screen.blit(rotated_wall4_image, (77, schetchik_kolichestva_stenok))
+                screen.blit(rotated_wall4_image, (501, schetchik_kolichestva_stenok))
+                screen.blit(wall4_image, (schetchik_kolichestva_stenok, 501))
+                schetchik_kolichestva_stenok += 37
 
-        for z in range(11):
-            screen.blit(wall_image, (schetchik_kolichestva_stenok, 77))
-            screen.blit(rotated_wall_image, (77, schetchik_kolichestva_stenok))
-            screen.blit(rotated_wall_image, (501, schetchik_kolichestva_stenok))
-            screen.blit(wall_image, (schetchik_kolichestva_stenok, 501))
-            schetchik_kolichestva_stenok += 37
 
         for y in range(self.height):
             for x in range(self.width):
