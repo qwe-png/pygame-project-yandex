@@ -3,6 +3,7 @@ import math
 import sys
 import os
 from random import randint
+import csv
 
 schetchik_ochkov_dlya_pokupki_bashen = 0
 randomazer = randint(0, 4)
@@ -16,7 +17,24 @@ tow = 0
 global c
 c = 0
 liv = False
-
+pole_zipper = list(zip())
+nomer_polya = 0
+nomer_pole_csv = open('pole_nomer.csv', encoding='utf8').read()
+samo_pole_csv = open('pole.csv', encoding='utf8')
+pole_colour = csv.reader(samo_pole_csv, delimiter=';', quotechar='"')
+for i in pole_colour:
+    pole_zipper.append(i)
+nomer_polya = int(nomer_pole_csv)
+print(nomer_polya)
+print(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[0])
+perviy_pervogo = int(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[0])
+vtoroy_pervogo = int(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[1])
+tretiy_pervogo = int(pole_zipper[int(nomer_pole_csv)][0].replace('(', '').replace(')', '').split(',')[2])
+perviy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[0])
+vtoroy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[1])
+tretiy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[2])
+print(perviy_vtorogo, vtoroy_pervogo, tretiy_pervogo)
+samo_pole_csv.close()
 
 def terminate():
     # выход
@@ -289,10 +307,10 @@ class Board:
                 pygame.draw.rect(screen, w, (x * cs + self.left, y * cs + self.top, cs + 1, cs + 1), 0)
 
                 if schitatel % 2 == 0:
-                    pygame.draw.rect(screen, pygame.Color(105, 105, 255),
+                    pygame.draw.rect(screen, pygame.Color(perviy_pervogo, vtoroy_pervogo, tretiy_pervogo),
                                      (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1), 0)
                 else:
-                    pygame.draw.rect(screen, pygame.Color(155, 105, 205),
+                    pygame.draw.rect(screen, pygame.Color(perviy_vtorogo, vtoroy_vtorogo, tretiy_vtorogo),
                                      (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1))
 
                 if not provershit:
@@ -332,7 +350,7 @@ class Board:
 
 
 pygame.init()
-pygame.display.set_caption('Игра')
+pygame.display.set_caption('Tower defence')
 
 size = width, height = 600, 700
 screen = pygame.display.set_mode(size)

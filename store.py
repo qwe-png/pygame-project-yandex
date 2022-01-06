@@ -34,6 +34,7 @@ nazad_image = load_image('nazad_btn_store.png')
 menu_izmeneniy_image = load_image('castomize_for_store_2.png')
 nadpis_image = load_image('store_opisanie.png')
 nazad_v_menu = False
+perehod_v_pole_changer = False
 while running:
     screen.fill('white')
     screen.blit(phon_image, (x, y))
@@ -48,9 +49,15 @@ while running:
             if 571 < int(event.pos[0]) < 636 and 9 < int(event.pos[1]) < 75:
                 running = False
                 nazad_v_menu = True
+            if 192 < int(event.pos[0]) < 476 and 131 < int(event.pos[1]) < 183:
+                running = False
+                perehod_v_pole_changer = True
 
     clock.tick(fps)
     pygame.display.flip()
 if nazad_v_menu:
     exec(open("main_menu.py").read())
     nazad_v_menu = False
+if perehod_v_pole_changer:
+    exec(open("pole_changer.py").read())
+    perehod_v_pole_changer = False
