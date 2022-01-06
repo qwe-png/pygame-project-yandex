@@ -8,6 +8,11 @@ height = 450
 size = width, height
 screen = pygame.display.set_mode(size)
 
+def terminate():
+    # выход
+    pygame.quit()
+    sys.exit()
+
 def load_image(name):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
@@ -37,7 +42,7 @@ while running:
     screen.blit(nadpis_image, (0, -10))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            terminate()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 571 < int(event.pos[0]) < 636 and 9 < int(event.pos[1]) < 75:
@@ -47,5 +52,5 @@ while running:
     clock.tick(fps)
     pygame.display.flip()
 if nazad_v_menu:
-    import main_menu
+    exec(open("main_menu.py").read())
     nazad_v_menu = False

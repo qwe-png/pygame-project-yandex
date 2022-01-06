@@ -50,21 +50,8 @@ def start_screen():
         pygame.display.flip()
         clock.tick(60)
 
-def end():
-    end_screen()
-    for i in enemy_group:
-        i.kill()
-    for i in bullets:
-        i.kill()
-    for i in tower_group:
-        i.kill()
 
-    player.points = 10
-    player.health = 3
 
-    for y in range(board.height):
-        for x in range(board.width):
-            board.board[y][x] = 0
 
 
 
@@ -393,11 +380,8 @@ while True:
                 Ball(10, bul_pos[n][0], bul_pos[n][1])
 
     if player.health <= 0:
-        end()
-        c = 0
-        liv = False
-        bul_pos = []
-        tow = 0
+        exec(open("game_over.py").read())
+
     # отрисовка
     tower_group.draw(screen)
     enemy_group.draw(screen)

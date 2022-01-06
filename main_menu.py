@@ -2,8 +2,12 @@ import pygame
 import cv2
 from subprocess import Popen, run, call
 import os
+import sys
 
-
+def terminate():
+    # выход
+    pygame.quit()
+    sys.exit()
 
 def main_preobrazovatel(file_gif):
     size = file_gif.shape[1::-1]
@@ -35,8 +39,7 @@ while banan:
     provershit += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            banan = False
-
+            terminate()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
@@ -49,7 +52,6 @@ while banan:
                  print('Вы нажали на кнопку settings')
 
     res = sama_gifka[fps].get_rect(center=(300, 300))
-    pygame.draw.rect(screen, pygame.Color(255, 255, 255), (0, 0, 255, 144))
 
     screen.blit(sama_gifka[fps], res)
     if provershit % 300 == 0:
@@ -58,12 +60,13 @@ while banan:
         pygame.display.flip()
 
 def rin(runfile):
-  with open(runfile,"r") as rnf:
+  with open(runfile, "r") as rnf:
     exec(rnf.read())
 
 if store_btn:
-    import store
+    rin('store.py')
     store_btn = False
+
 if play_btn:
     import main
     play_btn = False
