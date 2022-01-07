@@ -372,6 +372,12 @@ class Board:
                     Tower(x, y, self.left, self.top)
                     self.board[y][x] += 1
 
+        fontObj = pygame.font.Font(None, 60)
+        textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+        textRectObj = textSurfaceObj.get_rect()
+        textRectObj.center = (300, 525)
+        screen.blit(textSurfaceObj, textRectObj)
+
     def get_cell(self, mouse_pos):
         x = math.ceil((mouse_pos[0] - self.left) / self.cell_size) - 1
         y = math.ceil((mouse_pos[1] - self.top) / self.cell_size) - 1

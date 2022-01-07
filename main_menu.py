@@ -50,12 +50,15 @@ while banan:
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
                 import main
                 screen = pygame.display.set_mode((600, 430))
+                banan = False
             if 200 < int(event.pos[0]) < 386 and 192 < int(event.pos[1]) < 265:
                 rin('store.py')
                 screen = pygame.display.set_mode((600, 430))
+                banan = False
             if 200 < int(event.pos[0]) < 386 and 327 < int(event.pos[1]) < 401:
                 rin('settings.py')
                 screen = pygame.display.set_mode((600, 430))
+                banan = False
 
     res = sama_gifka[fps].get_rect(center=(300, 300))
 

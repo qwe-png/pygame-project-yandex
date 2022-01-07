@@ -3,6 +3,9 @@ import cv2
 from subprocess import Popen, run, call
 import os
 import sys
+import argparse
+
+
 
 def load_image(name):
     fullname = os.path.join('data', name)
@@ -78,7 +81,7 @@ def rin(runfile):
 
 
 if play_again_btn:
-    # import main
+    os.startfile(r'main.py')
     play_again_btn = False
 elif v_menu_btn:
     rin('main_menu.py')
