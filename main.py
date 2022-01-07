@@ -145,6 +145,20 @@ celoe_serdce_image = load_image('celoe_serdechko.png')
 pustoe_serdce_image = load_image('pustoe_serdechko.png')
 valuta_image = load_image('valuta.png')
 bullet_image = load_image("bullet.png")
+fon_1 = load_image('smenniy_fon1.jpg')
+fon_2 = load_image('smenniy_fon2.jpg')
+fon_3 = load_image('smenniy_fon3.jpg')
+fon_4 = load_image('smenniy_fon4.jpg')
+fon_5 = load_image('smenniy_fon5.jpg')
+fon_6 = load_image('smenniy_fon6.jpg')
+fon_7 = load_image('smenniy_fon7.jpg')
+fon_8 = load_image('smenniy_fon8.jpg')
+fon_9 = load_image('smenniy_fon9.jpg')
+fon_10 = load_image('smenniy_fon10.jpg')
+fon_black = load_image('smenniy_fon_black.jpg')
+fon_red = load_image('smenniy_fon_red.jpg')
+fon_white = load_image('smenniy_fon_white.jpg')
+fon_pink = load_image('smenniy_fon_pink.jpg')
 
 
 class Player:
@@ -291,6 +305,7 @@ class Board:
         schetchik_kolichestva_stenok = 77
         w = pygame.Color(255, 255, 255)
         cs = self.cell_size
+        screen.blit(fon_white, (0, 500))
         screen.blit(phon_igri_image, (0, 580))
         screen.blit(valuta_image, (510, 595))
         if nomer_path == 0:
