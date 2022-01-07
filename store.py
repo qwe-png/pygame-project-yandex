@@ -50,28 +50,27 @@ while running:
             print(event.pos)
             if 571 < int(event.pos[0]) < 636 and 9 < int(event.pos[1]) < 75:
                 running = False
-                nazad_v_menu = True
             if 192 < int(event.pos[0]) < 476 and 131 < int(event.pos[1]) < 183:
-                running = False
-                perehod_v_pole_changer = True
+                exec(open("pole_changer.py").read())
+                screen = pygame.display.set_mode(size)
             if 192 < int(event.pos[0]) < 476 and 205 < int(event.pos[1]) < 259:
-                running = False
-                perehod_v_path_changer = True
+                exec(open("path_changer.py").read())
+                screen = pygame.display.set_mode(size)
             if 192 < int(event.pos[0]) < 476 and 279 < int(event.pos[1]) < 330:
-                running = False
-                perehod_v_wall_changer = True
+                exec(open("wall_changer.py").read())
+                screen = pygame.display.set_mode(size)
 
     clock.tick(fps)
     pygame.display.flip()
-if nazad_v_menu:
-    exec(open("main_menu.py").read())
-    nazad_v_menu = False
-if perehod_v_pole_changer:
-    exec(open("pole_changer.py").read())
-    perehod_v_pole_changer = False
-if perehod_v_path_changer:
-    exec(open("path_changer.py").read())
-    perehod_v_path_changer = False
-if perehod_v_wall_changer:
-    exec(open("wall_changer.py").read())
-    perehod_v_wall_changer = False
+# if nazad_v_menu:
+#
+#     nazad_v_menu = False
+# if perehod_v_pole_changer:
+#
+#     perehod_v_pole_changer = False
+# if perehod_v_path_changer:
+#
+#     perehod_v_path_changer = False
+# if perehod_v_wall_changer:
+#
+#     perehod_v_wall_changer = False

@@ -19,12 +19,12 @@ c = 0
 liv = False
 pole_zipper = list(zip())
 nomer_polya = 0
-nomer_pole_csv = open('pole_nomer.csv', encoding='utf8').read()
-nomer_path_csv = open('path_nomer.csv', encoding='utf8').read()
-nomer_wall_csv = open('wall_nomer.csv', encoding='utf8').read()
+nomer_pole_csv = open('csv_data/pole_nomer.csv', encoding='utf8').read()
+nomer_path_csv = open('csv_data/path_nomer.csv', encoding='utf8').read()
+nomer_wall_csv = open('csv_data/wall_nomer.csv', encoding='utf8').read()
 nomer_wall = int(nomer_wall_csv)
 nomer_path = int(nomer_path_csv)
-samo_pole_csv = open('pole.csv', encoding='utf8')
+samo_pole_csv = open('csv_data/pole.csv', encoding='utf8')
 pole_colour = csv.reader(samo_pole_csv, delimiter=';', quotechar='"')
 for i in pole_colour:
     pole_zipper.append(i)
@@ -68,10 +68,6 @@ def start_screen():
                 return
         pygame.display.flip()
         clock.tick(60)
-
-
-
-
 
 
 def end_screen():
@@ -352,6 +348,7 @@ class Board:
             pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 60))
         if provershit:
             pygame.draw.rect(screen, pygame.Color(128, 128, 128), (250, 500, 100, 60))
+
         fontObj = pygame.font.Font(None, 60)
         textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
         textRectObj = textSurfaceObj.get_rect()
@@ -448,23 +445,21 @@ while True:
     if player.health <= 0:
         # TODO понять почему при повторном начале игры наичанет лагать
         exec(open("game_over.py").read())
-        player.health = 3
-        player.points = 10
+
         bul_pos = []
         c = 0
         tow = 0
         liv = False
-        for i in tower_group:
+
+        for i in all_sprites:
             i.kill()
-        for i in bullets:
-            i.kill()
-        for i in enemy_group:
-            i.kill()
-        for y in range(5):
-            for x in range(5):
-                board.board[y][x] = 0
+
         size = width, height = 600, 700
         screen = pygame.display.set_mode(size)
+        x, y = 5, 5
+        board = Board(x, y)
+        board.set_view(100, 100, 80)
+        player = Player()
 
 
     # отрисовка

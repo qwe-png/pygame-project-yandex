@@ -26,7 +26,7 @@ running = True
 scorost = 60
 fps = 60
 right = True
-provershit = open('pole_nomer.csv', encoding='utf8').read()
+provershit = open('csv_data/pole_nomer.csv', encoding='utf8').read()
 provershit = int(provershit)
 clock = pygame.time.Clock()
 phon_image = load_image('background.png')
@@ -60,12 +60,8 @@ while running:
                 if provershit == 4:
                     provershit = 0
             if 144 < int(event.pos[0]) < 561 and 580 < int(event.pos[1]) < 654:
-                open('path_nomer.csv', 'w').write(str(provershit))
+                open('csv_data/path_nomer.csv', 'w').write(str(provershit))
                 running = False
-                nazad_v_menu = True
 
     clock.tick(fps)
     pygame.display.flip()
-if nazad_v_menu:
-    exec(open("main_menu.py").read())
-    nazad_v_menu = False

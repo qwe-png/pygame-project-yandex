@@ -26,11 +26,16 @@ def loader(file):
         up.append(pygameImage)
     return up
 
+def rin(runfile):
+    with open(runfile, "r") as rnf:
+        exec(rnf.read())
+
 pygame.init()
 screen = pygame.display.set_mode((600, 430))
 clock = pygame.time.Clock()
 play_btn = False
 store_btn = False
+setting_btn = False
 sama_gifka = loader(r"data/menu_gif.gif")
 fps = 1
 provershit = 1
@@ -43,13 +48,14 @@ while banan:
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
-                banan = False
-                play_btn = True
+                import main
+                screen = pygame.display.set_mode((600, 430))
             if 200 < int(event.pos[0]) < 386 and 192 < int(event.pos[1]) < 265:
-                banan = False
-                store_btn = True
+                rin('store.py')
+                screen = pygame.display.set_mode((600, 430))
             if 200 < int(event.pos[0]) < 386 and 327 < int(event.pos[1]) < 401:
-                 print('Вы нажали на кнопку settings')
+                rin('settings.py')
+                screen = pygame.display.set_mode((600, 430))
 
     res = sama_gifka[fps].get_rect(center=(300, 300))
 
@@ -59,13 +65,13 @@ while banan:
         provershit = 1
         pygame.display.flip()
 
-def rin(runfile):
-    with open(runfile, "r") as rnf:
-        exec(rnf.read())
 
-if store_btn:
-    rin('store.py')
-    store_btn = False
-elif play_btn:
-    import main
-    play_btn = False
+# if store_btn:
+#
+#     store_btn = False
+# elif setting_btn:
+#
+#     store_btn = False
+# elif play_btn:
+#
+#     play_btn = False
