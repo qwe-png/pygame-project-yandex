@@ -52,22 +52,22 @@ while running:
             print(event.pos)
             if 571 < int(event.pos[0]) < 636 and 9 < int(event.pos[1]) < 75:
                 running = False
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'main_menu.py'])
                 terminate()
             if 192 < int(event.pos[0]) < 476 and 131 < int(event.pos[1]) < 183:
                 running = False
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'pole_changer.py'])
                 terminate()
             if 192 < int(event.pos[0]) < 476 and 205 < int(event.pos[1]) < 259:
                 running = False
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'path_changer.py'])
                 terminate()
             if 192 < int(event.pos[0]) < 476 and 279 < int(event.pos[1]) < 330:
                 running = False
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'wall_changer.py'])
                 terminate()
 

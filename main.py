@@ -466,24 +466,9 @@ while True:
                 Ball(10, bul_pos[n][0], bul_pos[n][1])
 
     if player.health <= 0:
-        # TODO понять почему при повторном начале игры наичанет лагать
-        bul_pos = []
-        c = 0
-        tow = 0
-        liv = False
-
-        for i in all_sprites:
-            i.kill()
-
-        x, y = 5, 5
-        board = Board(x, y)
-        board.set_view(100, 100, 80)
-        player = Player()
-        pygame.display.iconify()
+        pygame.display.quit()
         call(['python', 'game_over.py'])
-        terminate()
-        size = width, height = 600, 700
-        screen = pygame.display.set_mode(size)
+
 
 
     # отрисовка

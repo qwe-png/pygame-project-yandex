@@ -64,7 +64,7 @@ while running:
                     provershit = 0
             if 144 < int(event.pos[0]) < 561 and 580 < int(event.pos[1]) < 654:
                 open('csv_data/pole_nomer.csv', 'w').write(str(provershit))
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'store.py'])
                 terminate()
 

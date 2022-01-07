@@ -63,7 +63,7 @@ while running:
             if 144 < int(event.pos[0]) < 561 and 580 < int(event.pos[1]) < 654:
                 open('csv_data/wall_nomer.csv', 'w').write(str(provershit))
                 running = False
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'store.py'])
                 terminate()
 

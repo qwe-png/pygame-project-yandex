@@ -50,15 +50,15 @@ while banan:
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'main.py'])
                 terminate()
             if 200 < int(event.pos[0]) < 386 and 192 < int(event.pos[1]) < 265:
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'store.py'])
                 terminate()
             if 200 < int(event.pos[0]) < 386 and 327 < int(event.pos[1]) < 401:
-                pygame.display.iconify()
+                pygame.display.quit()
                 call(['python', 'settings.py'])
                 terminate()
 
