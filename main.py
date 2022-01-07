@@ -450,8 +450,6 @@ while True:
 
     if player.health <= 0:
         # TODO понять почему при повторном начале игры наичанет лагать
-        exec(open("game_over.py").read())
-
         bul_pos = []
         c = 0
         tow = 0
@@ -460,12 +458,13 @@ while True:
         for i in all_sprites:
             i.kill()
 
-        size = width, height = 600, 700
-        screen = pygame.display.set_mode(size)
         x, y = 5, 5
         board = Board(x, y)
         board.set_view(100, 100, 80)
         player = Player()
+        exec(open("game_over.py").read())
+        size = width, height = 600, 700
+        screen = pygame.display.set_mode(size)
 
 
     # отрисовка
