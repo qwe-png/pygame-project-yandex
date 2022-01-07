@@ -464,7 +464,9 @@ while True:
         board = Board(x, y)
         board.set_view(100, 100, 80)
         player = Player()
+        pygame.display.iconify()
         call(['python', 'game_over.py'])
+        terminate()
         size = width, height = 600, 700
         screen = pygame.display.set_mode(size)
 

@@ -1,8 +1,10 @@
 import pygame
 import cv2
 from subprocess import Popen, run, call
+import subprocess
 import os
 import sys
+import time
 
 def terminate():
     # выход
@@ -48,17 +50,17 @@ while banan:
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
+                pygame.display.iconify()
                 call(['python', 'main.py'])
-                screen = pygame.display.set_mode((1, 1))
-                banan = False
+                terminate()
             if 200 < int(event.pos[0]) < 386 and 192 < int(event.pos[1]) < 265:
+                pygame.display.iconify()
                 call(['python', 'store.py'])
-                screen = pygame.display.set_mode((1, 1))
-                banan = False
+                terminate()
             if 200 < int(event.pos[0]) < 386 and 327 < int(event.pos[1]) < 401:
+                pygame.display.iconify()
                 call(['python', 'settings.py'])
-                screen = pygame.display.set_mode((1, 1))
-                banan = False
+                terminate()
 
     res = sama_gifka[fps].get_rect(center=(300, 300))
 
@@ -68,6 +70,7 @@ while banan:
         provershit = 1
         pygame.display.flip()
 
+terminate()
 
 # if store_btn:
 #

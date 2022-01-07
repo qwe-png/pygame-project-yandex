@@ -81,8 +81,12 @@ def rin(runfile):
 
 
 if play_again_btn:
+    pygame.display.iconify()
     call(['python', 'main.py'])
     play_again_btn = False
+    terminate()
 elif v_menu_btn:
+    pygame.display.iconify()
     call(['python', 'main_menu.py'])
     v_menu_btn = False
+    terminate()
