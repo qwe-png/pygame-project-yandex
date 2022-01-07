@@ -48,15 +48,17 @@ while banan:
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
-                import main
-                screen = pygame.display.set_mode((600, 430))
+                call(['python', 'main.py'])
+                screen = pygame.display.set_mode((1, 1))
                 banan = False
             if 200 < int(event.pos[0]) < 386 and 192 < int(event.pos[1]) < 265:
-                rin('store.py')
-                screen = pygame.display.set_mode((600, 430))
+                call(['python', 'store.py'])
+                screen = pygame.display.set_mode((1, 1))
+                banan = False
             if 200 < int(event.pos[0]) < 386 and 327 < int(event.pos[1]) < 401:
-                rin('settings.py')
-                screen = pygame.display.set_mode((600, 430))
+                call(['python', 'settings.py'])
+                screen = pygame.display.set_mode((1, 1))
+                banan = False
 
     res = sama_gifka[fps].get_rect(center=(300, 300))
 

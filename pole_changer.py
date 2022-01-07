@@ -1,6 +1,9 @@
 import pygame
 import os
 import sys
+from subprocess import Popen, run, call
+
+
 
 pygame.init()
 width = 800
@@ -62,6 +65,7 @@ while running:
             if 144 < int(event.pos[0]) < 561 and 580 < int(event.pos[1]) < 654:
                 open('csv_data/pole_nomer.csv', 'w').write(str(provershit))
                 running = False
+                call(['python', 'store.py'])
 
     clock.tick(fps)
     pygame.display.flip()

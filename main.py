@@ -4,6 +4,8 @@ import sys
 import os
 from random import randint
 import csv
+from subprocess import Popen, run, call
+
 
 schetchik_ochkov_dlya_pokupki_bashen = 0
 randomazer = randint(0, 4)
@@ -462,7 +464,7 @@ while True:
         board = Board(x, y)
         board.set_view(100, 100, 80)
         player = Player()
-        exec(open("game_over.py").read())
+        call(['python', 'game_over.py'])
         size = width, height = 600, 700
         screen = pygame.display.set_mode(size)
 

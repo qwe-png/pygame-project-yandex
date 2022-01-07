@@ -1,6 +1,8 @@
 import pygame
 import os
 import sys
+from subprocess import Popen, run, call
+
 
 pygame.init()
 width = 660
@@ -50,14 +52,18 @@ while running:
             print(event.pos)
             if 571 < int(event.pos[0]) < 636 and 9 < int(event.pos[1]) < 75:
                 running = False
+                call(['python', 'main_menu.py'])
             if 192 < int(event.pos[0]) < 476 and 131 < int(event.pos[1]) < 183:
-                exec(open("pole_changer.py").read())
+                running = False
+                call(['python', 'pole_changer.py'])
                 screen = pygame.display.set_mode(size)
             if 192 < int(event.pos[0]) < 476 and 205 < int(event.pos[1]) < 259:
-                exec(open("path_changer.py").read())
+                running = False
+                call(['python', 'path_changer.py'])
                 screen = pygame.display.set_mode(size)
             if 192 < int(event.pos[0]) < 476 and 279 < int(event.pos[1]) < 330:
-                exec(open("wall_changer.py").read())
+                running = False
+                call(['python', 'wall_changer.py'])
                 screen = pygame.display.set_mode(size)
 
     clock.tick(fps)

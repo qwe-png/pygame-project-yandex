@@ -81,8 +81,8 @@ def rin(runfile):
 
 
 if play_again_btn:
-    os.startfile(r'main.py')
+    call(['python', 'main.py'])
     play_again_btn = False
 elif v_menu_btn:
-    rin('main_menu.py')
+    call(['python', 'main_menu.py'])
     v_menu_btn = False
