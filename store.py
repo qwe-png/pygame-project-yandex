@@ -70,7 +70,11 @@ while running:
                 pygame.display.quit()
                 call(['python', 'wall_changer.py'])
                 terminate()
-
+            if 192 < int(event.pos[0]) < 476 and 349 < int(event.pos[1]) < 401:
+                running = False
+                pygame.display.quit()
+                call(['python', 'fon_changer.py'])
+                terminate()
     clock.tick(fps)
     pygame.display.flip()
 # if nazad_v_menu:

@@ -24,8 +24,10 @@ nomer_polya = 0
 nomer_pole_csv = open('csv_data/pole_nomer.csv', encoding='utf8').read()
 nomer_path_csv = open('csv_data/path_nomer.csv', encoding='utf8').read()
 nomer_wall_csv = open('csv_data/wall_nomer.csv', encoding='utf8').read()
+nomer_fon_csv = open('csv_data/background_nomer.csv', encoding='utf8').read()
 nomer_wall = int(nomer_wall_csv)
 nomer_path = int(nomer_path_csv)
+nomer_fon = int(nomer_fon_csv)
 samo_pole_csv = open('csv_data/pole.csv', encoding='utf8')
 pole_colour = csv.reader(samo_pole_csv, delimiter=';', quotechar='"')
 for i in pole_colour:
@@ -305,7 +307,34 @@ class Board:
         schetchik_kolichestva_stenok = 77
         w = pygame.Color(255, 255, 255)
         cs = self.cell_size
-        screen.blit(fon_white, (0, 500))
+        if nomer_fon == 0:
+            screen.blit(fon_1, (0, 500))
+        if nomer_fon == 1:
+            screen.blit(fon_2, (0, 500))
+        if nomer_fon == 2:
+            screen.blit(fon_3, (0, 500))
+        if nomer_fon == 3:
+            screen.blit(fon_4, (0, 500))
+        if nomer_fon == 4:
+            screen.blit(fon_5, (0, 500))
+        if nomer_fon == 5:
+            screen.blit(fon_6, (0, 500))
+        if nomer_fon == 6:
+            screen.blit(fon_7, (0, 500))
+        if nomer_fon == 7:
+            screen.blit(fon_8, (0, 500))
+        if nomer_fon == 8:
+            screen.blit(fon_9, (0, 500))
+        if nomer_fon == 9:
+            screen.blit(fon_10, (0, 500))
+        if nomer_fon == 10:
+            screen.blit(fon_black, (0, 500))
+        if nomer_fon == 11:
+            screen.blit(fon_white, (0, 500))
+        if nomer_fon == 12:
+            screen.blit(fon_red, (0, 500))
+        if nomer_fon == 13:
+            screen.blit(fon_pink, (0, 500))
         screen.blit(phon_igri_image, (0, 580))
         screen.blit(valuta_image, (510, 595))
         if nomer_path == 0:
