@@ -4,6 +4,7 @@ import sys
 import os
 from random import randint
 import csv
+import sounds
 from subprocess import Popen, run, call
 
 
@@ -248,6 +249,10 @@ class Enemy(pygame.sprite.Sprite):
         self.kill()
         liv = False
         player.points += 1
+
+        # звук
+        sounds.z_tower()
+        sounds.play()
 
 
 class Ball(pygame.sprite.Sprite):
