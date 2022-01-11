@@ -225,7 +225,7 @@ class Enemy(pygame.sprite.Sprite):
         global naprovlenie, liv
         self.x = self.rect.left
         self.y = self.rect.top
-        if self.health == 0:
+        if self.health <= 0:
             self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
@@ -281,6 +281,7 @@ class Ball(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, enemy_group):
             for s in pygame.sprite.spritecollide(self, enemy_group, dokill=False):
                 s.health -= 1
+                print(s.health)
             self.kill()
         if self.rect.left == 0:
             self.kill()
