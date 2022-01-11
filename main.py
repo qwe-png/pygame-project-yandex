@@ -292,7 +292,7 @@ class Tower(pygame.sprite.Sprite):
         self.image = tower_image
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
-        Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25, naprovlenie)
+        # Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25, naprovlenie)
         bul_pos.append([tower_width * pos_x + left + 25, tower_height * pos_y + top + 25])
 
 
