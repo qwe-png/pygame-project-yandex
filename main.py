@@ -17,6 +17,7 @@ schetchik_kolichestva_stenok = 0
 schetchik_kolichestva_serdec = 3
 bul_pos = []
 tow = 0
+naprovlenie = 0
 global c
 c = 0
 liv = False
@@ -216,38 +217,43 @@ class Enemy(pygame.sprite.Sprite):
         liv = True
         self.level = 0
         self.health = 0
-        self.speed = 200
+        self.speed = 150
 
         self.c = 0
 
     def update(self, *args):
+        global naprovlenie, liv
         self.x = self.rect.left
         self.y = self.rect.top
+        liv = True
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
+            naprovlenie = 0
         elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
             if self.c == 0:
                 self.image = pygame.transform.rotate(self.image, 270)
                 self.c = 1
+                naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
         elif (self.x >= 530 and self.y >= 9) and self.y <= 800:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
+                naprovlenie = 2
             self.rect = self.rect.move(0, self.speed / args[0])
         else:
             self.end()
 
     def end(self):
         global liv
-        self.kill()
         liv = False
+        self.kill()
         player.health -= 1
 
     def killed(self):
         global liv
-        self.kill()
         liv = False
+        self.kill()
         player.points += 1
 
         # звук
@@ -256,38 +262,40 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, radius, x, y):
+    def __init__(self, radius, x, y, n):
         super().__init__(bullets)
         self.radius = radius
         self.image = bullet_image
+        self.x, self.y = x, y
         self.rect = pygame.Rect(x, y, 2 * radius, 2 * radius)
-        self.vx = -5
-        self.vy = 0
+        self.napr = n
 
     def update(self):
-        self.rect = self.rect.move(self.vx, self.vy)
+        if self.napr == 0:
+            self.rect.move_ip(-5, 0)
+        if self.napr == 1:
+            self.rect.move_ip(0, -5)
+        if self.napr == 2:
+            self.rect.move_ip(5, 0)
         if pygame.sprite.spritecollideany(self, enemy_group):
             pygame.sprite.spritecollide(self, enemy_group, bullets)
-            self.dis()
+            self.kill()
             Enemy().killed()
-
-    def dis(self):
-        self.kill()
+        # if not screen.contains(self.rect):
+            # self.kill()
 
 
 
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         super().__init__(tower_group, all_sprites)
-        global tow
+        global tow, naprovlenie
         tow += 1
-        print(tow)
         self.image = tower_image
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
-        Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25)
+        Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25, naprovlenie)
         bul_pos.append([tower_width * pos_x + left + 25, tower_height * pos_y + top + 25])
-        print(bul_pos)
 
 
 class Board:
@@ -497,7 +505,7 @@ while True:
         # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
         for q in range(tow):
             for n in range(len(bul_pos)):
-                Ball(10, bul_pos[n][0], bul_pos[n][1])
+                Ball(10, bul_pos[n][0], bul_pos[n][1], naprovlenie)
 
     if player.health <= 0:
         pygame.display.quit()
