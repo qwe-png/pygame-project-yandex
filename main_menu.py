@@ -51,7 +51,7 @@ while banan:
             print(event.pos)
             if 200 < int(event.pos[0]) < 386 and 58 < int(event.pos[1]) < 133:
                 pygame.display.quit()
-                call(['python', 'main.py'])
+                call(['python', 'map.py'])
                 terminate()
             if 200 < int(event.pos[0]) < 386 and 192 < int(event.pos[1]) < 265:
                 pygame.display.quit()

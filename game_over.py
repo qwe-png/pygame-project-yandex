@@ -43,6 +43,7 @@ screen = pygame.display.set_mode((500, 519))
 clock = pygame.time.Clock()
 v_menu_btn = False
 play_again_btn = False
+na_kartu = False
 sama_gifka = loader(r"data/game_over_gif.gif")
 fps = 1
 provershit = 1
@@ -58,7 +59,8 @@ while banan:
                 banan = False
                 play_again_btn = True
             if 179 < int(event.pos[0]) < 313 and 304 < int(event.pos[1]) < 341:
-                print('Вы нажали на кнопку назад на карту')
+                banan = False
+                na_kartu = True
             if 179 < int(event.pos[0]) < 313 and 351 < int(event.pos[1]) < 388:
                 banan = False
                 v_menu_btn = True
@@ -89,4 +91,9 @@ elif v_menu_btn:
     pygame.display.quit()
     call(['python', 'main_menu.py'])
     v_menu_btn = False
+    terminate()
+elif na_kartu:
+    pygame.display.quit()
+    call(['python', 'map.py'])
+    na_kartu = False
     terminate()
