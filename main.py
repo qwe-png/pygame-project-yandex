@@ -216,7 +216,7 @@ class Enemy(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 0
+        self.health = 2
         self.speed = 150
 
         self.c = 0
@@ -225,6 +225,8 @@ class Enemy(pygame.sprite.Sprite):
         global naprovlenie, liv
         self.x = self.rect.left
         self.y = self.rect.top
+        if self.health == 0:
+            self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
             naprovlenie = 0
@@ -277,7 +279,12 @@ class Ball(pygame.sprite.Sprite):
         if self.napr == 2:
             self.rect.move_ip(5, 0)
         if pygame.sprite.spritecollideany(self, enemy_group):
-            pygame.sprite.spritecollide(self, enemy_group, bullets)
+            for s in pygame.sprite.spritecollide(self, enemy_group, dokill=False):
+                s.health -= 1
+            self.kill()
+        if self.rect.left == 0:
+            self.kill()
+        if self.rect.top == 0:
             self.kill()
         # if not screen.contains(self.rect):
             # self.kill()
@@ -500,9 +507,8 @@ while True:
     if c % 50 == 0 and bool(enemy_group):
         # здесь можно поменять скорострельность башенки
         # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
-        for q in range(tow):
-            for n in range(len(bul_pos)):
-                Ball(10, bul_pos[n][0], bul_pos[n][1], naprovlenie)
+        for n in range(len(bul_pos)):
+            Ball(10, bul_pos[n][0], bul_pos[n][1], naprovlenie)
 
     if player.health <= 0:
         pygame.display.quit()
