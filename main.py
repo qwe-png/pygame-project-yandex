@@ -225,7 +225,6 @@ class Enemy(pygame.sprite.Sprite):
         global naprovlenie, liv
         self.x = self.rect.left
         self.y = self.rect.top
-        liv = True
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
             naprovlenie = 0
@@ -280,7 +279,6 @@ class Ball(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, enemy_group):
             pygame.sprite.spritecollide(self, enemy_group, bullets)
             self.kill()
-            Enemy().killed()
         # if not screen.contains(self.rect):
             # self.kill()
 
@@ -497,10 +495,9 @@ while True:
                 provershit = False
 
     board.render(screen)
-
     # проверки
     c += 1
-    if c % 50 == 0 and (liv is True):
+    if c % 50 == 0 and bool(enemy_group):
         # здесь можно поменять скорострельность башенки
         # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
         for q in range(tow):
