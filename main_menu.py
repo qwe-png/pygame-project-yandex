@@ -59,7 +59,7 @@ while banan:
                 terminate()
             if 200 < int(event.pos[0]) < 386 and 327 < int(event.pos[1]) < 401:
                 pygame.display.quit()
-                call(['python', 'sounds.py'])
+                call(['python', 'settings.py'])
                 terminate()
 
     res = sama_gifka[fps].get_rect(center=(300, 300))

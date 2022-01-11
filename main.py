@@ -251,7 +251,7 @@ class Enemy(pygame.sprite.Sprite):
         player.points += 1
 
         # звук
-        sounds.z_tower()
+        sounds.z_enemy()
         sounds.play()
 
 
