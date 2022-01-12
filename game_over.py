@@ -3,6 +3,7 @@ import cv2
 from subprocess import Popen, run, call
 import os
 import sys
+import sounds
 import argparse
 
 
@@ -38,6 +39,9 @@ def loader(file):
         up.append(pygameImage)
     return up
 
+
+sounds.dead()
+sounds.play()
 pygame.init()
 screen = pygame.display.set_mode((500, 519))
 clock = pygame.time.Clock()

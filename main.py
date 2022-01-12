@@ -5,6 +5,7 @@ import os
 from random import randint
 import csv
 import sounds
+from time import sleep
 from subprocess import Popen, run, call
 
 
@@ -236,7 +237,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.c = 1
                 naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
-        elif (self.x >= 530 and self.y >= 9) and self.y <= 800:
+        elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
@@ -250,6 +251,9 @@ class Enemy(pygame.sprite.Sprite):
         liv = False
         self.kill()
         player.health -= 1
+
+        sounds.enemy_end()
+        sounds.play()
 
     def killed(self):
         global liv
@@ -302,6 +306,8 @@ class Tower(pygame.sprite.Sprite):
             tower_width * pos_x + left, tower_height * pos_y + top)
         # Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25, naprovlenie)
         bul_pos.append([tower_width * pos_x + left + 25, tower_height * pos_y + top + 25])
+        sounds.z_tower()
+        sounds.play()
 
 
 class Board:
@@ -456,9 +462,9 @@ class Board:
             return None
 
     def on_click(self, cell_coords):
-        if cell_coords != None:
+        if cell_coords != None and player.points > 0:
             self.board[list(cell_coords)[1]][list(cell_coords)[0]] += 1
-            print(self.board[list(cell_coords)[1]][list(cell_coords)[0]])
+            player.points -= 1
 
     def get_click(self, mouse_pos):
         cell = self.get_cell(mouse_pos)
@@ -479,7 +485,6 @@ board.set_view(100, 100, 80)
 fps = 60
 clock = pygame.time.Clock()
 
-start_screen()
 player = Player()
 
 while True:
@@ -510,10 +515,13 @@ while True:
         # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
         for n in range(len(bul_pos)):
             Ball(10, bul_pos[n][0], bul_pos[n][1], naprovlenie)
+            sounds.z_bullet()
+            sounds.play()
 
     if player.health <= 0:
         pygame.display.quit()
         call(['python', 'game_over.py'])
+        terminate()
 
 
 
