@@ -9,7 +9,7 @@ from time import sleep
 from subprocess import Popen, run, call
 
 
-schetchik_ochkov_dlya_pokupki_bashen = 0
+schetchik_ochkov_dlya_pokupki_bashen = 10
 randomazer = randint(0, 4)
 provershit = 10
 schitatel = 0
@@ -124,10 +124,11 @@ def load_image(name):
     image = pygame.image.load(fullname)
     return image
 
-
+price = 10
 all_sprites = pygame.sprite.Group()
 tower_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
+boss = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 
 tower_width = tower_height = 80
@@ -164,12 +165,24 @@ fon_black = load_image('smenniy_fon_black.jpg')
 fon_red = load_image('smenniy_fon_red.jpg')
 fon_white = load_image('smenniy_fon_white.jpg')
 fon_pink = load_image('smenniy_fon_pink.jpg')
+image_sprite_boss_napravo = [pygame.image.load("data/boss_napravo1.png"),
+                             pygame.image.load("data/boss_napravo2.png"),
+                             pygame.image.load("data/boss_napravo3.png"),
+                             pygame.image.load("data/boss_napravo4.png")]
+image_sprite_boss_nazad = [pygame.image.load("data/boss_nazad1.png"),
+                           pygame.image.load("data/boss_nazad2.png"),
+                           pygame.image.load("data/boss_nazad3.png"),
+                           pygame.image.load("data/boss_nazad4.png")]
+image_sprite_boss_vpered = [pygame.image.load("data/boss_tuda1.png"),
+                            pygame.image.load("data/boss_tuda2.png"),
+                            pygame.image.load("data/boss_tuda3.png"),
+                            pygame.image.load("data/boss_tuda4.png")]
 
 
 class Player:
     def __init__(self):
         self.health = 3
-        self.points = 10
+        self.points = 100
 
     def draw(self):
         font = pygame.font.Font(None, 30)
@@ -259,7 +272,7 @@ class Enemy(pygame.sprite.Sprite):
         global liv
         liv = False
         self.kill()
-        player.points += 1
+        player.points += 10
 
         # звук
         sounds.z_enemy()
@@ -294,10 +307,11 @@ class Ball(pygame.sprite.Sprite):
         # if not screen.contains(self.rect):
             # self.kill()
 
-
+proverka_na_prisutstvie_bashni = list(zip())
 
 class Tower(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
+        global proverka_na_prisutstvie_bashni
         super().__init__(tower_group, all_sprites)
         global tow, naprovlenie
         tow += 1
@@ -313,6 +327,7 @@ class Tower(pygame.sprite.Sprite):
 class Board:
     # создание поля
     def __init__(self, width, height):
+        self.price = 0
         self.width = width
         self.height = height
         self.board = [[0] * width for _ in range(height)]
@@ -462,9 +477,25 @@ class Board:
             return None
 
     def on_click(self, cell_coords):
-        if cell_coords != None and player.points > 0:
+        if cell_coords != None and player.points > 0 and player.points >= self.price + 10 and not ('(' + str((int(event.pos[0]) - int(self.left)) // self.cell_size) + ', ' + str(
+                (int(event.pos[1]) - int(self.top)) // self.cell_size) + ')' if not ((int(event.pos[0]) - int(
+                self.left)) // self.cell_size) < 0 and not ((int(event.pos[0]) - int(
+                self.left)) // self.cell_size) >= self.width and not ((int(event.pos[1]) - int(
+                self.top)) // self.cell_size) < 0 and not ((int(event.pos[1]) - int(
+                self.top)) // self.cell_size) >= self.height else None) in proverka_na_prisutstvie_bashni:
+
+            proverka_na_prisutstvie_bashni.append('(' + str((int(event.pos[0]) - int(self.left)) // self.cell_size) + ', ' + str(
+                (int(event.pos[1]) - int(self.top)) // self.cell_size) + ')' if not ((int(event.pos[0]) - int(
+                self.left)) // self.cell_size) < 0 and not ((int(event.pos[0]) - int(
+                self.left)) // self.cell_size) >= self.width and not ((int(event.pos[1]) - int(
+                self.top)) // self.cell_size) < 0 and not ((int(event.pos[1]) - int(
+                self.top)) // self.cell_size) >= self.height else None)
+            print(proverka_na_prisutstvie_bashni)
+            global schetchik_ochkov_dlya_pokupki_bashen
+            schetchik_ochkov_dlya_pokupki_bashen += 10
+            self.price += 10
             self.board[list(cell_coords)[1]][list(cell_coords)[0]] += 1
-            player.points -= 1
+            player.points -= self.price
 
     def get_click(self, mouse_pos):
         cell = self.get_cell(mouse_pos)
@@ -497,9 +528,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             Enemy()
             board.get_click(event.pos)
-            if provershit:
-                schetchik_ochkov_dlya_pokupki_bashen += 10
-                print('asd')
+
 
         if event.type == pygame.MOUSEMOTION:
             if 250 <= int(event.pos[0]) <= 350 and 500 <= int(event.pos[1]) <= 550:
