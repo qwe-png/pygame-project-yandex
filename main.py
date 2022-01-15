@@ -28,6 +28,8 @@ nomer_pole_csv = open('csv_data/pole_nomer.csv', encoding='utf8').read()
 nomer_path_csv = open('csv_data/path_nomer.csv', encoding='utf8').read()
 nomer_wall_csv = open('csv_data/wall_nomer.csv', encoding='utf8').read()
 nomer_fon_csv = open('csv_data/background_nomer.csv', encoding='utf8').read()
+slozhnost = open('csv_data/slozhnost.csv', encoding='utf8').read()
+
 nomer_wall = int(nomer_wall_csv)
 nomer_path = int(nomer_path_csv)
 nomer_fon = int(nomer_fon_csv)
@@ -165,6 +167,7 @@ fon_black = load_image('smenniy_fon_black.jpg')
 fon_red = load_image('smenniy_fon_red.jpg')
 fon_white = load_image('smenniy_fon_white.jpg')
 fon_pink = load_image('smenniy_fon_pink.jpg')
+mesto_spavna_image = load_image('mesto_spavna.png')
 image_sprite_boss_napravo = [pygame.image.load("data/boss_napravo1.png"),
                              pygame.image.load("data/boss_napravo2.png"),
                              pygame.image.load("data/boss_napravo3.png"),
@@ -323,7 +326,8 @@ class Tower(pygame.sprite.Sprite):
         sounds.z_tower()
         sounds.play()
 
-
+stoimost = 0
+provershit_naprav_bossa = 0
 class Board:
     # создание поля
     def __init__(self, width, height):
@@ -429,6 +433,13 @@ class Board:
                 screen.blit(rotated_wall4_image, (501, schetchik_kolichestva_stenok))
                 screen.blit(wall4_image, (schetchik_kolichestva_stenok, 501))
                 schetchik_kolichestva_stenok += 37
+        if slozhnost == '1':
+            if provershit_naprav_bossa == 0:
+                screen.blit(image_sprite_boss_vpered[cena], (boss_move_x, boss_move_y))
+            elif provershit_naprav_bossa == 1:
+                screen.blit(image_sprite_boss_napravo[cena], (boss_move_x, boss_move_y))
+            elif provershit_naprav_bossa == 2:
+                screen.blit(image_sprite_boss_nazad[cena], (boss_move_x, boss_move_y))
 
         if not provershit:
             pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 60))
@@ -463,6 +474,7 @@ class Board:
         textRectObj = textSurfaceObj.get_rect()
         textRectObj.center = (300, 525)
         screen.blit(textSurfaceObj, textRectObj)
+        screen.blit(mesto_spavna_image, (-20, 515))
 
     def get_cell(self, mouse_pos):
         x = math.ceil((mouse_pos[0] - self.left) / self.cell_size) - 1
@@ -517,10 +529,11 @@ fps = 60
 clock = pygame.time.Clock()
 
 player = Player()
-
+velocity = 12
+boss_move_x = 0
+boss_move_y = 498
+cena = 0
 while True:
-    screen.fill(pygame.Color("black"))
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
@@ -535,9 +548,38 @@ while True:
                 provershit = True
             else:
                 provershit = False
+        screen.fill(pygame.Color("black"))
 
     board.render(screen)
     # проверки
+    stoimost += 1
+    if stoimost < 10:
+        cena = 0
+    elif 10 < stoimost < 20:
+        cena = 1
+    elif 20 < stoimost < 30:
+        cena = 2
+    elif 30 < stoimost < 40:
+        cena = 3
+    if stoimost == 45:
+        stoimost = 0
+        cena = 0
+    if boss_move_x == 0 and boss_move_y > 0:
+        boss_move_x = 0
+        boss_move_y -= 0.4
+        provershit_naprav_bossa = 0
+    elif 522 > boss_move_x >= 0 and boss_move_y <= 0:
+        boss_move_x += 0.4
+        boss_move_y = 0
+        provershit_naprav_bossa = 1
+    elif 522 <= boss_move_x and 522 > boss_move_y >= 0:
+        boss_move_x = 522
+        boss_move_y += 0.4
+        provershit_naprav_bossa = 2
+
+
+
+
     c += 1
     if c % 50 == 0 and bool(enemy_group):
         # здесь можно поменять скорострельность башенки

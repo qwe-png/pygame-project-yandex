@@ -6,8 +6,8 @@ from subprocess import Popen, run, call
 
 
 pygame.init()
-width = 1282
-height = 581
+width = 1000
+height = 563
 size = width, height
 screen = pygame.display.set_mode(size)
 
@@ -42,7 +42,13 @@ while running:
             terminate()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
-            if 138 < int(event.pos[0]) < 452 and 148 < int(event.pos[1]) < 524:
+            if 206 < int(event.pos[0]) < 412 and 152 < int(event.pos[1]) < 421:
+                open('csv_data/slozhnost.csv', 'w').write('0')
+                pygame.display.quit()
+                call(['python', 'main.py'])
+                terminate()
+            elif 609 < int(event.pos[0]) < 812 and 152 < int(event.pos[1]) < 421:
+                open('csv_data/slozhnost.csv', 'w').write('1')
                 pygame.display.quit()
                 call(['python', 'main.py'])
                 terminate()
