@@ -441,10 +441,10 @@ class Board:
             elif provershit_naprav_bossa == 2:
                 screen.blit(image_sprite_boss_nazad[cena], (boss_move_x, boss_move_y))
 
-        if not provershit:
-            pygame.draw.rect(screen, pygame.Color(105, 105, 105), (250, 500, 100, 60))
-        if provershit:
-            pygame.draw.rect(screen, pygame.Color(128, 128, 128), (250, 500, 100, 60))
+        if player.points >= self.price + 10:
+            pygame.draw.rect(screen, pygame.Color(210, 210, 0), (250, 500, 100, 60))
+        else:
+            pygame.draw.rect(screen, pygame.Color(100, 100, 100), (250, 500, 100, 60))
 
         fontObj = pygame.font.Font(None, 60)
         textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))

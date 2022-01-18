@@ -17,6 +17,7 @@ def main_preobrazovatel(file_gif):
     surface = pygame.image.frombuffer(file_gif.flatten(), size, 'RGB')
     return surface.convert()
 
+
 def loader(file):
     dvizh = cv2.VideoCapture(file)
     up = []
@@ -28,9 +29,11 @@ def loader(file):
         up.append(pygameImage)
     return up
 
+
 def rin(runfile):
     with open(runfile, "r") as rnf:
         exec(rnf.read())
+
 
 pygame.init()
 screen = pygame.display.set_mode((600, 430))
