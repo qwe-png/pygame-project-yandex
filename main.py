@@ -136,6 +136,8 @@ bullets = pygame.sprite.Group()
 tower_width = tower_height = 80
 tower_image = load_image('tower.png')
 enemy_image = load_image("enemy.png")
+enemy2_image = load_image('enemy2.png')
+enemy3_image = load_image('enemy3.png')
 path2_image = load_image('path2.jpg')
 path_image = load_image('path.png')
 path3_image = load_image('path3.jpg')
@@ -180,6 +182,8 @@ image_sprite_boss_vpered = [pygame.image.load("data/boss_tuda1.png"),
                             pygame.image.load("data/boss_tuda2.png"),
                             pygame.image.load("data/boss_tuda3.png"),
                             pygame.image.load("data/boss_tuda4.png")]
+stage_1_complete_sprite = load_image('stage_1_complete.png')
+continue_sprite = load_image('continue.png')
 
 
 class Player:
@@ -193,7 +197,6 @@ class Player:
         text = font.render(f"Жизни: {str(self.health)}", True, (100, 255, 100))
         text_x = width - text.get_width() - 10
         text_y = 10
-        screen.blit(text, (text_x, text_y))
 
         text2 = font.render(f"Очки:{str(self.points)}", True, (100, 255, 100))
         fontObj = pygame.font.Font(None, 50)
@@ -218,6 +221,138 @@ class Player:
             screen.blit(pustoe_serdce_image, (84, 600))
             screen.blit(pustoe_serdce_image, (107, 600))
             screen.blit(pustoe_serdce_image, (130, 600))
+
+vsego_deneg = 100
+
+
+class Enemy3(pygame.sprite.Sprite):
+    def __init__(self):
+        global schetchik_kolichestva_serdec, liv
+        super().__init__(enemy_group, all_sprites)
+        self.image = enemy3_image
+        self.image_copy = enemy3_image
+        self.x = 10
+        self.y = 720
+        self.rect = self.image.get_rect()
+        self.rect = self.rect.move(
+            self.x, self.y)
+        liv = True
+        self.level = 0
+        self.health = 8
+        self.speed = 150
+
+        self.c = 0
+
+    def update(self, *args):
+        global naprovlenie, liv
+        self.x = self.rect.left
+        self.y = self.rect.top
+        if self.health <= 0:
+            self.killed()
+        if self.x == 10 and self.y > 10:
+            self.rect = self.rect.move(0, -self.speed / args[0])
+            naprovlenie = 0
+        elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
+            if self.c == 0:
+                self.image = pygame.transform.rotate(self.image, 270)
+                self.c = 1
+                naprovlenie = 1
+            self.rect = self.rect.move(self.speed / args[0], 0)
+        elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
+            if self.c == 1:
+                self.image = pygame.transform.rotate(self.image_copy, 180)
+                self.c = 2
+                naprovlenie = 2
+            self.rect = self.rect.move(0, self.speed / args[0])
+        else:
+            self.end()
+
+    def end(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.health -= 1
+        player.points += 15
+        vsego_deneg += 15
+
+        sounds.enemy_end()
+        sounds.play()
+
+    def killed(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.points += 15
+        vsego_deneg += 15
+
+        # звук
+        sounds.z_enemy()
+        sounds.play()
+
+
+class Enemy2(pygame.sprite.Sprite):
+    def __init__(self):
+        global schetchik_kolichestva_serdec, liv
+        super().__init__(enemy_group, all_sprites)
+        self.image = enemy2_image
+        self.image_copy = enemy2_image
+        self.x = 10
+        self.y = 720
+        self.rect = self.image.get_rect()
+        self.rect = self.rect.move(
+            self.x, self.y)
+        liv = True
+        self.level = 0
+        self.health = 5
+        self.speed = 150
+
+        self.c = 0
+
+    def update(self, *args):
+        global naprovlenie, liv
+        self.x = self.rect.left
+        self.y = self.rect.top
+        if self.health <= 0:
+            self.killed()
+        if self.x == 10 and self.y > 10:
+            self.rect = self.rect.move(0, -self.speed / args[0])
+            naprovlenie = 0
+        elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
+            if self.c == 0:
+                self.image = pygame.transform.rotate(self.image, 270)
+                self.c = 1
+                naprovlenie = 1
+            self.rect = self.rect.move(self.speed / args[0], 0)
+        elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
+            if self.c == 1:
+                self.image = pygame.transform.rotate(self.image_copy, 180)
+                self.c = 2
+                naprovlenie = 2
+            self.rect = self.rect.move(0, self.speed / args[0])
+        else:
+            self.end()
+
+    def end(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.health -= 1
+        player.points += 10
+        vsego_deneg += 10
+
+        sounds.enemy_end()
+        sounds.play()
+
+    def killed(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.points += 10
+        vsego_deneg += 10
+
+        # звук
+        sounds.z_enemy()
+        sounds.play()
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -263,19 +398,22 @@ class Enemy(pygame.sprite.Sprite):
             self.end()
 
     def end(self):
-        global liv
+        global liv, vsego_deneg
         liv = False
         self.kill()
         player.health -= 1
+        player.points += 5
+        vsego_deneg += 5
 
         sounds.enemy_end()
         sounds.play()
 
     def killed(self):
-        global liv
+        global liv, vsego_deneg
         liv = False
         self.kill()
-        player.points += 10
+        player.points += 5
+        vsego_deneg += 5
 
         # звук
         sounds.z_enemy()
@@ -328,6 +466,7 @@ class Tower(pygame.sprite.Sprite):
 
 stoimost = 0
 provershit_naprav_bossa = 0
+prozrachnost = 0
 class Board:
     # создание поля
     def __init__(self, width, height):
@@ -440,17 +579,16 @@ class Board:
                 screen.blit(image_sprite_boss_napravo[cena], (boss_move_x, boss_move_y))
             elif provershit_naprav_bossa == 2:
                 screen.blit(image_sprite_boss_nazad[cena], (boss_move_x, boss_move_y))
-
         if player.points >= self.price + 10:
             pygame.draw.rect(screen, pygame.Color(210, 210, 0), (250, 500, 100, 60))
         else:
             pygame.draw.rect(screen, pygame.Color(100, 100, 100), (250, 500, 100, 60))
 
-        fontObj = pygame.font.Font(None, 60)
-        textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
-        textRectObj = textSurfaceObj.get_rect()
-        textRectObj.center = (300, 525)
-        screen.blit(textSurfaceObj, textRectObj)
+        shrift = pygame.font.Font(None, 60)
+        nanesenniy_shrift = shrift.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+        endsrift = nanesenniy_shrift.get_rect()
+        endsrift.center = (300, 525)
+        screen.blit(nanesenniy_shrift, endsrift)
 
         for y in range(self.height):
             for x in range(self.width):
@@ -466,15 +604,19 @@ class Board:
                                      (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1))
 
                 if self.board[y][x] == 1:
-                    Tower(x, y, self.left, self.top)
+                    Tower(x, y, self.left, self.top).__hash__()
                     self.board[y][x] += 1
 
-        fontObj = pygame.font.Font(None, 60)
-        textSurfaceObj = fontObj.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
-        textRectObj = textSurfaceObj.get_rect()
-        textRectObj.center = (300, 525)
-        screen.blit(textSurfaceObj, textRectObj)
+        shrift = pygame.font.Font(None, 60)
+        nanesenniy_shrift = shrift.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+        endsrift = nanesenniy_shrift.get_rect()
+        endsrift.center = (300, 525)
+        screen.blit(nanesenniy_shrift, endsrift)
         screen.blit(mesto_spavna_image, (-20, 515))
+        if provershit_konca_pervoy_volni:
+            screen.blit(stage_1_complete_sprite, (0, 150))
+            screen.blit(continue_sprite, (420, -20))
+
 
     def get_cell(self, mouse_pos):
         x = math.ceil((mouse_pos[0] - self.left) / self.cell_size) - 1
@@ -509,6 +651,7 @@ class Board:
             self.board[list(cell_coords)[1]][list(cell_coords)[0]] += 1
             player.points -= self.price
 
+
     def get_click(self, mouse_pos):
         cell = self.get_cell(mouse_pos)
         self.on_click(cell)
@@ -533,14 +676,21 @@ velocity = 12
 boss_move_x = 0
 boss_move_y = 498
 cena = 0
+schetchik_vragov = 0
+provershit_konca_pervoy_volni = False
+provershit_konca_vtoroy_volni = False
+provershit_nachala_vtoroy_volni = False
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            Enemy()
             board.get_click(event.pos)
+            print(event.pos)
+            if provershit_konca_pervoy_volni and 436 < int(event.pos[0]) <= 600 and 0 <= int(event.pos[1]) < 51:
+                provershit_konca_pervoy_volni = False
+                provershit_nachala_vtoroy_volni = True
 
 
         if event.type == pygame.MOUSEMOTION:
@@ -549,10 +699,24 @@ while True:
             else:
                 provershit = False
         screen.fill(pygame.Color("black"))
-
     board.render(screen)
-    # проверки
-    stoimost += 1
+    if not schetchik_vragov > 425:
+        schetchik_vragov += 1
+
+    if schetchik_vragov % 25 == 0:
+        Enemy()
+    if schetchik_vragov % 35 == 0:
+        Enemy2()
+    if schetchik_vragov % 250 == 0:
+        Enemy3()
+    if vsego_deneg == 320 and not provershit_nachala_vtoroy_volni:
+        provershit_konca_pervoy_volni = True
+    if provershit_konca_pervoy_volni:
+        if not prozrachnost > 255:
+            prozrachnost += 1
+            stage_1_complete_sprite.set_alpha(prozrachnost)
+            continue_sprite.set_alpha(prozrachnost)
+
     if stoimost < 10:
         cena = 0
     elif 10 < stoimost < 20:
@@ -576,6 +740,7 @@ while True:
         boss_move_x = 522
         boss_move_y += 0.4
         provershit_naprav_bossa = 2
+
 
 
 
