@@ -743,9 +743,6 @@ class Board:
         endsrift.center = (300, 525)
         screen.blit(nanesenniy_shrift, endsrift)
         screen.blit(mesto_spavna_image, (-20, 515))
-        if provershit_konca_pervoy_volni:
-            screen.blit(stage_1_complete_sprite, (0, 150))
-            screen.blit(continue_sprite, (420, -20))
 
 
     def get_cell(self, mouse_pos):
@@ -811,6 +808,7 @@ schetchik_vragov_vtoroy_volni = 0
 provershit_konca_pervoy_volni = False
 provershit_konca_vtoroy_volni = False
 provershit_nachala_vtoroy_volni = False
+bool_2wawe = True
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -847,15 +845,6 @@ while True:
             prozrachnost += 1
             stage_1_complete_sprite.set_alpha(prozrachnost)
             continue_sprite.set_alpha(prozrachnost)
-    if provershit_nachala_vtoroy_volni:
-        if schetchik_vragov_vtoroy_volni < 900:
-            schetchik_vragov_vtoroy_volni += 1
-            if schetchik_vragov_vtoroy_volni % 50 == 0 and schetchik_vragov_vtoroy_volni <= 451:
-                Enemy3()
-            if schetchik_vragov_vtoroy_volni % 110 == 0 and schetchik_vragov_vtoroy_volni > 230:
-                Enemy4()
-            if schetchik_vragov_vtoroy_volni % 200 == 0 and schetchik_vragov_vtoroy_volni > 399:
-                Enemy5()
 
     if stoimost < 10:
         cena = 0
@@ -907,6 +896,21 @@ while True:
     player.draw()
     bullets.draw(screen)
 
+    if provershit_nachala_vtoroy_volni:
+        if bool_2wawe:
+            naprovlenie = 0
+            bool_2wawe = False
+        if schetchik_vragov_vtoroy_volni < 900:
+            schetchik_vragov_vtoroy_volni += 1
+            if schetchik_vragov_vtoroy_volni % 50 == 0 and schetchik_vragov_vtoroy_volni <= 451:
+                Enemy3()
+            if schetchik_vragov_vtoroy_volni % 110 == 0 and schetchik_vragov_vtoroy_volni > 230:
+                Enemy4()
+            if schetchik_vragov_vtoroy_volni % 200 == 0 and schetchik_vragov_vtoroy_volni > 399:
+                Enemy5()
+    if provershit_konca_pervoy_volni:
+        screen.blit(stage_1_complete_sprite, (0, 150))
+        screen.blit(continue_sprite, (420, -20))
     # обновление
     bullets.update()
     enemy_group.update(fps)
