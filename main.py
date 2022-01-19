@@ -138,6 +138,8 @@ tower_image = load_image('tower.png')
 enemy_image = load_image("enemy.png")
 enemy2_image = load_image('enemy2.png')
 enemy3_image = load_image('enemy3.png')
+enemy4_image = load_image('enemy4.png')
+enemy5_image = load_image('enemy5.png')
 path2_image = load_image('path2.jpg')
 path_image = load_image('path.png')
 path3_image = load_image('path3.jpg')
@@ -224,6 +226,135 @@ class Player:
 
 vsego_deneg = 100
 
+class Enemy5(pygame.sprite.Sprite):
+    def __init__(self):
+        global schetchik_kolichestva_serdec, liv
+        super().__init__(enemy_group, all_sprites)
+        self.image = enemy5_image
+        self.image_copy = enemy5_image
+        self.x = 10
+        self.y = 720
+        self.rect = self.image.get_rect()
+        self.rect = self.rect.move(
+            self.x, self.y)
+        liv = True
+        self.level = 0
+        self.health = 5
+        self.speed = 220
+
+        self.c = 0
+
+    def update(self, *args):
+        global naprovlenie, liv
+        self.x = self.rect.left
+        self.y = self.rect.top
+        if self.health <= 0:
+            self.killed()
+        if self.x == 10 and self.y > 10:
+            self.rect = self.rect.move(0, -self.speed / args[0])
+            naprovlenie = 0
+        elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
+            if self.c == 0:
+                self.image = pygame.transform.rotate(self.image, 270)
+                self.c = 1
+                naprovlenie = 1
+            self.rect = self.rect.move(self.speed / args[0], 0)
+        elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
+            if self.c == 1:
+                self.image = pygame.transform.rotate(self.image_copy, 180)
+                self.c = 2
+                naprovlenie = 2
+            self.rect = self.rect.move(0, self.speed / args[0])
+        else:
+            self.end()
+
+    def end(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.health -= 1
+        player.points += 25
+        vsego_deneg += 25
+
+        sounds.enemy_end()
+        sounds.play()
+
+    def killed(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.points += 25
+        vsego_deneg += 25
+
+        # звук
+        sounds.z_enemy()
+        sounds.play()
+
+
+class Enemy4(pygame.sprite.Sprite):
+    def __init__(self):
+        global schetchik_kolichestva_serdec, liv
+        super().__init__(enemy_group, all_sprites)
+        self.image = enemy4_image
+        self.image_copy = enemy4_image
+        self.x = 10
+        self.y = 720
+        self.rect = self.image.get_rect()
+        self.rect = self.rect.move(
+            self.x, self.y)
+        liv = True
+        self.level = 0
+        self.health = 9
+        self.speed = 90
+
+        self.c = 0
+
+    def update(self, *args):
+        global naprovlenie, liv
+        self.x = self.rect.left
+        self.y = self.rect.top
+        if self.health <= 0:
+            self.killed()
+        if self.x == 10 and self.y > 10:
+            self.rect = self.rect.move(0, -self.speed / args[0])
+            naprovlenie = 0
+        elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
+            if self.c == 0:
+                self.image = pygame.transform.rotate(self.image, 270)
+                self.c = 1
+                naprovlenie = 1
+            self.rect = self.rect.move(self.speed / args[0], 0)
+        elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
+            if self.c == 1:
+                self.image = pygame.transform.rotate(self.image_copy, 180)
+                self.c = 2
+                naprovlenie = 2
+            self.rect = self.rect.move(0, self.speed / args[0])
+        else:
+            self.end()
+
+    def end(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.health -= 1
+        player.points += 40
+        vsego_deneg += 40
+
+        sounds.enemy_end()
+        sounds.play()
+
+    def killed(self):
+        global liv, vsego_deneg
+        liv = False
+        self.kill()
+        player.points += 40
+        vsego_deneg += 40
+
+        # звук
+        sounds.z_enemy()
+        sounds.play()
+
 
 class Enemy3(pygame.sprite.Sprite):
     def __init__(self):
@@ -238,7 +369,7 @@ class Enemy3(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 8
+        self.health = 6
         self.speed = 150
 
         self.c = 0
@@ -303,8 +434,8 @@ class Enemy2(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 5
-        self.speed = 150
+        self.health = 4
+        self.speed = 200
 
         self.c = 0
 
@@ -439,7 +570,6 @@ class Ball(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, enemy_group):
             for s in pygame.sprite.spritecollide(self, enemy_group, dokill=False):
                 s.health -= 1
-                print(s.health)
             self.kill()
         if self.rect.left == 0:
             self.kill()
@@ -676,7 +806,8 @@ velocity = 12
 boss_move_x = 0
 boss_move_y = 498
 cena = 0
-schetchik_vragov = 0
+schetchik_vragov_pervoy_volni = 0
+schetchik_vragov_vtoroy_volni = 0
 provershit_konca_pervoy_volni = False
 provershit_konca_vtoroy_volni = False
 provershit_nachala_vtoroy_volni = False
@@ -700,22 +831,31 @@ while True:
                 provershit = False
         screen.fill(pygame.Color("black"))
     board.render(screen)
-    if not schetchik_vragov > 425:
-        schetchik_vragov += 1
+    if not schetchik_vragov_pervoy_volni > 425:
+        schetchik_vragov_pervoy_volni += 1
 
-    if schetchik_vragov % 25 == 0:
+    if schetchik_vragov_pervoy_volni % 45 == 0 and schetchik_vragov_pervoy_volni:
         Enemy()
-    if schetchik_vragov % 35 == 0:
+    if schetchik_vragov_pervoy_volni % 75 == 0:
         Enemy2()
-    if schetchik_vragov % 250 == 0:
+    if schetchik_vragov_pervoy_volni % 250 == 0:
         Enemy3()
-    if vsego_deneg == 320 and not provershit_nachala_vtoroy_volni:
+    if vsego_deneg == 210 and not provershit_nachala_vtoroy_volni:
         provershit_konca_pervoy_volni = True
     if provershit_konca_pervoy_volni:
         if not prozrachnost > 255:
             prozrachnost += 1
             stage_1_complete_sprite.set_alpha(prozrachnost)
             continue_sprite.set_alpha(prozrachnost)
+    if provershit_nachala_vtoroy_volni:
+        if schetchik_vragov_vtoroy_volni < 900:
+            schetchik_vragov_vtoroy_volni += 1
+            if schetchik_vragov_vtoroy_volni % 50 == 0 and schetchik_vragov_vtoroy_volni <= 451:
+                Enemy3()
+            if schetchik_vragov_vtoroy_volni % 110 == 0 and schetchik_vragov_vtoroy_volni > 230:
+                Enemy4()
+            if schetchik_vragov_vtoroy_volni % 200 == 0 and schetchik_vragov_vtoroy_volni > 399:
+                Enemy5()
 
     if stoimost < 10:
         cena = 0

@@ -4,7 +4,7 @@ pygame.init()
 screen_size = (400,400)
 screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption("timer")
-time_left = 90 #duration of the timer in seconds
+time_left = 90 ##duration of the timer in seconds
 crashed = False
 font = pygame.font.SysFont("Somic Sans MS", 30)
 color = (255, 255, 255)
