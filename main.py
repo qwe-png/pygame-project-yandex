@@ -252,18 +252,15 @@ class Enemy5(pygame.sprite.Sprite):
             self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
-            naprovlenie = 0
         elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
             if self.c == 0:
                 self.image = pygame.transform.rotate(self.image, 270)
                 self.c = 1
-                naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
         elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
-                naprovlenie = 2
             self.rect = self.rect.move(0, self.speed / args[0])
         else:
             self.end()
@@ -317,18 +314,15 @@ class Enemy4(pygame.sprite.Sprite):
             self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
-            naprovlenie = 0
         elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
             if self.c == 0:
                 self.image = pygame.transform.rotate(self.image, 270)
                 self.c = 1
-                naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
         elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
-                naprovlenie = 2
             self.rect = self.rect.move(0, self.speed / args[0])
         else:
             self.end()
@@ -382,18 +376,15 @@ class Enemy3(pygame.sprite.Sprite):
             self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
-            naprovlenie = 0
         elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
             if self.c == 0:
                 self.image = pygame.transform.rotate(self.image, 270)
                 self.c = 1
-                naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
         elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
-                naprovlenie = 2
             self.rect = self.rect.move(0, self.speed / args[0])
         else:
             self.end()
@@ -447,18 +438,15 @@ class Enemy2(pygame.sprite.Sprite):
             self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
-            naprovlenie = 0
         elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
             if self.c == 0:
                 self.image = pygame.transform.rotate(self.image, 270)
                 self.c = 1
-                naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
         elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
-                naprovlenie = 2
             self.rect = self.rect.move(0, self.speed / args[0])
         else:
             self.end()
@@ -512,18 +500,15 @@ class Enemy(pygame.sprite.Sprite):
             self.killed()
         if self.x == 10 and self.y > 10:
             self.rect = self.rect.move(0, -self.speed / args[0])
-            naprovlenie = 0
         elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
             if self.c == 0:
                 self.image = pygame.transform.rotate(self.image, 270)
                 self.c = 1
-                naprovlenie = 1
             self.rect = self.rect.move(self.speed / args[0], 0)
         elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
             if self.c == 1:
                 self.image = pygame.transform.rotate(self.image_copy, 180)
                 self.c = 2
-                naprovlenie = 2
             self.rect = self.rect.move(0, self.speed / args[0])
         else:
             self.end()
@@ -771,7 +756,7 @@ class Board:
                 self.left)) // self.cell_size) >= self.width and not ((int(event.pos[1]) - int(
                 self.top)) // self.cell_size) < 0 and not ((int(event.pos[1]) - int(
                 self.top)) // self.cell_size) >= self.height else None)
-            print(proverka_na_prisutstvie_bashni)
+            # print(proverka_na_prisutstvie_bashni)
             global schetchik_ochkov_dlya_pokupki_bashen
             schetchik_ochkov_dlya_pokupki_bashen += 10
             self.price += 10
@@ -810,13 +795,18 @@ provershit_konca_vtoroy_volni = False
 provershit_nachala_vtoroy_volni = False
 bool_2wawe = True
 while True:
+    for en in enemy_group:
+        if en.c == 1 and naprovlenie == 0:
+            naprovlenie = 1
+        if en.c == 2:
+            naprovlenie = 2
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             board.get_click(event.pos)
-            print(event.pos)
+            # print(event.pos)
             if provershit_konca_pervoy_volni and 436 < int(event.pos[0]) <= 600 and 0 <= int(event.pos[1]) < 51:
                 provershit_konca_pervoy_volni = False
                 provershit_nachala_vtoroy_volni = True
@@ -841,11 +831,11 @@ while True:
     if vsego_deneg == 210 and not provershit_nachala_vtoroy_volni:
         provershit_konca_pervoy_volni = True
     if provershit_konca_pervoy_volni:
+        naprovlenie = 0
         if not prozrachnost > 255:
             prozrachnost += 1
             stage_1_complete_sprite.set_alpha(prozrachnost)
             continue_sprite.set_alpha(prozrachnost)
-
     if stoimost < 10:
         cena = 0
     elif 10 < stoimost < 20:
@@ -897,6 +887,7 @@ while True:
     bullets.draw(screen)
 
     if provershit_nachala_vtoroy_volni:
+        naprovlenie = 0
         if bool_2wawe:
             naprovlenie = 0
             bool_2wawe = False
