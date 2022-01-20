@@ -184,8 +184,10 @@ image_sprite_boss_vpered = [pygame.image.load("data/boss_tuda1.png"),
                             pygame.image.load("data/boss_tuda2.png"),
                             pygame.image.load("data/boss_tuda3.png"),
                             pygame.image.load("data/boss_tuda4.png")]
-stage_1_complete_sprite = load_image('stage_1_complete.png')
+stage_1_complete_image = load_image('stage_1_complete.png')
+stage_2_complete_image = load_image('stage_2_complete.png')
 continue_sprite = load_image('continue.png')
+menu_viigrisha_image = load_image('menu_viigrisha.png')
 
 
 class Player:
@@ -239,7 +241,7 @@ class Enemy5(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 5
+        self.health = 8
         self.speed = 220
 
         self.c = 0
@@ -301,8 +303,8 @@ class Enemy4(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 9
-        self.speed = 90
+        self.health = 16
+        self.speed = 110
 
         self.c = 0
 
@@ -332,8 +334,8 @@ class Enemy4(pygame.sprite.Sprite):
         liv = False
         self.kill()
         player.health -= 1
-        player.points += 40
-        vsego_deneg += 40
+        player.points += 30
+        vsego_deneg += 30
 
         sounds.enemy_end()
         sounds.play()
@@ -342,8 +344,8 @@ class Enemy4(pygame.sprite.Sprite):
         global liv, vsego_deneg
         liv = False
         self.kill()
-        player.points += 40
-        vsego_deneg += 40
+        player.points += 30
+        vsego_deneg += 30
 
         # звук
         sounds.z_enemy()
@@ -363,8 +365,8 @@ class Enemy3(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 6
-        self.speed = 150
+        self.health = 8
+        self.speed = 180
 
         self.c = 0
 
@@ -425,7 +427,7 @@ class Enemy2(pygame.sprite.Sprite):
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 4
+        self.health = 5
         self.speed = 200
 
         self.c = 0
@@ -488,7 +490,7 @@ class Enemy(pygame.sprite.Sprite):
         liv = True
         self.level = 0
         self.health = 2
-        self.speed = 150
+        self.speed = 140
 
         self.c = 0
 
@@ -582,6 +584,7 @@ class Tower(pygame.sprite.Sprite):
 stoimost = 0
 provershit_naprav_bossa = 0
 prozrachnost = 0
+prozrachnost2 = 0
 class Board:
     # создание поля
     def __init__(self, width, height):
@@ -807,11 +810,23 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             board.get_click(event.pos)
             # print(event.pos)
+            print(event.pos)
             if provershit_konca_pervoy_volni and 436 < int(event.pos[0]) <= 600 and 0 <= int(event.pos[1]) < 51:
                 provershit_konca_pervoy_volni = False
                 provershit_nachala_vtoroy_volni = True
-
-
+            if provershit_konca_vtoroy_volni and 210 < int(event.pos[0]) <= 246 and 403 <= int(event.pos[1]) < 437:
+                pygame.display.quit()
+                call(['python', 'main_menu.py'])
+                terminate()
+            if provershit_konca_vtoroy_volni and 271 < int(event.pos[0]) <= 324 and 397 <= int(event.pos[1]) < 443:
+                pygame.display.quit()
+                open('csv_data/slozhnost.csv', 'w').write('1')
+                call(['python', 'main.py'])
+                terminate()
+            if provershit_konca_vtoroy_volni and 348 < int(event.pos[0]) <= 388 and 397 <= int(event.pos[1]) < 443:
+                pygame.display.quit()
+                call(['python', 'main.py'])
+                terminate()
         if event.type == pygame.MOUSEMOTION:
             if 250 <= int(event.pos[0]) <= 350 and 500 <= int(event.pos[1]) <= 550:
                 provershit = True
@@ -830,12 +845,22 @@ while True:
         Enemy3()
     if vsego_deneg == 210 and not provershit_nachala_vtoroy_volni:
         provershit_konca_pervoy_volni = True
+    if vsego_deneg == 600:
+        provershit_konca_vtoroy_volni = True
+    if vsego_deneg > 210: provershit_konca_pervoy_volni = False
     if provershit_konca_pervoy_volni:
         naprovlenie = 0
         if not prozrachnost > 255:
             prozrachnost += 1
-            stage_1_complete_sprite.set_alpha(prozrachnost)
+            stage_1_complete_image.set_alpha(prozrachnost)
             continue_sprite.set_alpha(prozrachnost)
+    if provershit_konca_vtoroy_volni:
+        naprovlenie = 0
+        if not prozrachnost2 > 255:
+            prozrachnost2 += 1
+            stage_2_complete_image.set_alpha(prozrachnost2)
+            menu_viigrisha_image.set_alpha(prozrachnost2)
+    stoimost += 1
     if stoimost < 10:
         cena = 0
     elif 10 < stoimost < 20:
@@ -859,9 +884,6 @@ while True:
         boss_move_x = 522
         boss_move_y += 0.4
         provershit_naprav_bossa = 2
-
-
-
 
 
     c += 1
@@ -900,8 +922,11 @@ while True:
             if schetchik_vragov_vtoroy_volni % 200 == 0 and schetchik_vragov_vtoroy_volni > 399:
                 Enemy5()
     if provershit_konca_pervoy_volni:
-        screen.blit(stage_1_complete_sprite, (0, 150))
+        screen.blit(stage_1_complete_image, (0, 150))
         screen.blit(continue_sprite, (420, -20))
+    if provershit_konca_vtoroy_volni:
+        screen.blit(stage_2_complete_image, (0, 150))
+        screen.blit(menu_viigrisha_image, (165, 379))
     # обновление
     bullets.update()
     enemy_group.update(fps)
