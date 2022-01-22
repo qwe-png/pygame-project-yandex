@@ -581,6 +581,20 @@ class Tower(pygame.sprite.Sprite):
         sounds.z_tower()
         sounds.play()
 
+class Tower_up(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, left, top):
+        global proverka_na_prisutstvie_bashni
+        super().__init__(tower_group, all_sprites)
+        global tow, naprovlenie
+        tow += 1
+        self.image = tower_image
+        self.rect = self.image.get_rect().move(
+            tower_width * pos_x + left, tower_height * pos_y + top)
+        # Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25, naprovlenie)
+        bul_pos.append([tower_width * pos_x + left + 25, tower_height * pos_y + top + 25])
+        sounds.z_tower()
+        sounds.play()
+
 stoimost = 0
 provershit_naprav_bossa = 0
 prozrachnost = 0
@@ -588,10 +602,12 @@ prozrachnost2 = 0
 class Board:
     # создание поля
     def __init__(self, width, height):
-        self.price = 0
+        self.schetchik_ochkov_dlya_pokupki_bashen = 0
+        self.price = 10
         self.width = width
         self.height = height
         self.board = [[0] * width for _ in range(height)]
+        self.chckr = {}
         # значения по умолчанию
         self.set_view()
 
@@ -697,13 +713,9 @@ class Board:
                 screen.blit(image_sprite_boss_napravo[cena], (boss_move_x, boss_move_y))
             elif provershit_naprav_bossa == 2:
                 screen.blit(image_sprite_boss_nazad[cena], (boss_move_x, boss_move_y))
-        if player.points >= self.price + 10:
-            pygame.draw.rect(screen, pygame.Color(210, 210, 0), (250, 500, 100, 60))
-        else:
-            pygame.draw.rect(screen, pygame.Color(100, 100, 100), (250, 500, 100, 60))
 
         shrift = pygame.font.Font(None, 60)
-        nanesenniy_shrift = shrift.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+        nanesenniy_shrift = shrift.render(str(self.schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
         endsrift = nanesenniy_shrift.get_rect()
         endsrift.center = (300, 525)
         screen.blit(nanesenniy_shrift, endsrift)
@@ -721,12 +733,24 @@ class Board:
                     pygame.draw.rect(screen, pygame.Color(perviy_vtorogo, vtoroy_vtorogo, tretiy_vtorogo),
                                      (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1))
 
+
+                if player.points + 10 >= self.price:
+                    pygame.draw.rect(screen, pygame.Color(210, 210, 0), (250, 500, 100, 60))
+                else:
+                    pygame.draw.rect(screen, pygame.Color(100, 100, 100), (250, 500, 100, 60))
+
                 if self.board[y][x] == 1:
-                    Tower(x, y, self.left, self.top).__hash__()
+                    print(1)
+                    self.chckr[f"{y}{x}"] = Tower(x, y, self.left, self.top)
                     self.board[y][x] += 1
 
+                if self.board[y][x] == 3:
+                    print(2)
+                    self.chckr[f"{y}{x}"].kill()
+                    Tower_up(x, y, self.left, self.top)
+                    self.board[y][x] += 1
         shrift = pygame.font.Font(None, 60)
-        nanesenniy_shrift = shrift.render(str(schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
+        nanesenniy_shrift = shrift.render(str(self.schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
         endsrift = nanesenniy_shrift.get_rect()
         endsrift.center = (300, 525)
         screen.blit(nanesenniy_shrift, endsrift)
@@ -746,25 +770,12 @@ class Board:
             return None
 
     def on_click(self, cell_coords):
-        if cell_coords != None and player.points > 0 and player.points >= self.price + 10 and not ('(' + str((int(event.pos[0]) - int(self.left)) // self.cell_size) + ', ' + str(
-                (int(event.pos[1]) - int(self.top)) // self.cell_size) + ')' if not ((int(event.pos[0]) - int(
-                self.left)) // self.cell_size) < 0 and not ((int(event.pos[0]) - int(
-                self.left)) // self.cell_size) >= self.width and not ((int(event.pos[1]) - int(
-                self.top)) // self.cell_size) < 0 and not ((int(event.pos[1]) - int(
-                self.top)) // self.cell_size) >= self.height else None) in proverka_na_prisutstvie_bashni:
-
-            proverka_na_prisutstvie_bashni.append('(' + str((int(event.pos[0]) - int(self.left)) // self.cell_size) + ', ' + str(
-                (int(event.pos[1]) - int(self.top)) // self.cell_size) + ')' if not ((int(event.pos[0]) - int(
-                self.left)) // self.cell_size) < 0 and not ((int(event.pos[0]) - int(
-                self.left)) // self.cell_size) >= self.width and not ((int(event.pos[1]) - int(
-                self.top)) // self.cell_size) < 0 and not ((int(event.pos[1]) - int(
-                self.top)) // self.cell_size) >= self.height else None)
+        if cell_coords != None and player.points >= self.price and self.board[list(cell_coords)[1]][list(cell_coords)[0]] < 3:
             # print(proverka_na_prisutstvie_bashni)
-            global schetchik_ochkov_dlya_pokupki_bashen
-            schetchik_ochkov_dlya_pokupki_bashen += 10
-            self.price += 10
             self.board[list(cell_coords)[1]][list(cell_coords)[0]] += 1
+            self.schetchik_ochkov_dlya_pokupki_bashen += 10
             player.points -= self.price
+            self.price += 10
 
 
     def get_click(self, mouse_pos):
@@ -833,6 +844,17 @@ while True:
             else:
                 provershit = False
         screen.fill(pygame.Color("black"))
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = True
+                # пауза
+                while running:
+                    for event in pygame.event.get():
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_ESCAPE:
+                                running = False
+
     board.render(screen)
     if not schetchik_vragov_pervoy_volni > 425:
         schetchik_vragov_pervoy_volni += 1
@@ -887,13 +909,25 @@ while True:
 
 
     c += 1
-    if c % 50 == 0 and bool(enemy_group):
-        # здесь можно поменять скорострельность башенки
-        # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
-        for n in range(len(bul_pos)):
-            Ball(10, bul_pos[n][0], bul_pos[n][1], naprovlenie)
-            sounds.z_bullet()
-            sounds.play()
+    # здесь можно поменять скорострельность башенки
+    # 100 => 5 секунд, значит 50 примерно равно 2.5, а 25 это 1.25 сек.
+    # for n in range(len(bul_pos)):
+    #     Ball(10, bul_pos[n][0], bul_pos[n][1], naprovlenie)
+    #     sounds.z_bullet()
+    #     sounds.play()
+    for y in range(5):
+        for x in range(5):
+            if board.board[y][x] == 2:
+                if c % 50 == 0 and bool(enemy_group):
+                    Ball(10, x * board.cell_size + board.left, y * board.cell_size + board.top, naprovlenie)
+                    sounds.z_bullet()
+                    sounds.play()
+            if board.board[y][x] == 4:
+                if c % 25 == 0 and bool(enemy_group):
+                    Ball(10, x * board.cell_size + board.left, y * board.cell_size + board.top, naprovlenie)
+                    sounds.z_bullet()
+                    sounds.play()
+
 
     if player.health <= 0:
         pygame.display.quit()
