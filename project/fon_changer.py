@@ -101,7 +101,7 @@ while running:
                 elif provershit == 13:
                     provershit = 10
                 else:
-                    provershit = int(provershit) + 1
+                    provershit = int(provershit) + 1 - 1 + 1
             if 469 < int(event.pos[0]) < 524 and 33 < int(event.pos[1]) < 82:
                 if not proverka_monotonnosti:
                     provershit = 10
