@@ -135,6 +135,7 @@ bullets = pygame.sprite.Group()
 
 tower_width = tower_height = 80
 tower_image = load_image('tower.png')
+tower_image2 = load_image('tower_2.png')
 enemy_image = load_image("enemy.png")
 enemy2_image = load_image('enemy2.png')
 enemy3_image = load_image('enemy3.png')
@@ -572,6 +573,8 @@ class Tower(pygame.sprite.Sprite):
         global proverka_na_prisutstvie_bashni
         super().__init__(tower_group, all_sprites)
         global tow, naprovlenie
+        self.povor1 = True
+        self.povor2 = True
         tow += 1
         self.image = tower_image
         self.rect = self.image.get_rect().move(
@@ -581,19 +584,51 @@ class Tower(pygame.sprite.Sprite):
         sounds.z_tower()
         sounds.play()
 
+    def povorot1(self, deg):
+        if self.povor1 and self.povor2:
+            self.image = pygame.transform.rotate(self.image, deg)
+            self.povor1 = False
+
+    def povorot2(self, deg):
+        if self.povor2:
+            self.image = pygame.transform.rotate(tower_image, deg)
+            self.povor2 = False
+
+    def sbros(self):
+        self.image = tower_image
+        self.povor1 = True
+        self.povor2 = True
+
 class Tower_up(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, left, top):
         global proverka_na_prisutstvie_bashni
         super().__init__(tower_group, all_sprites)
         global tow, naprovlenie
+        self.povor1 = True
+        self.povor2 = True
         tow += 1
-        self.image = tower_image
+        self.image = tower_image2
         self.rect = self.image.get_rect().move(
             tower_width * pos_x + left, tower_height * pos_y + top)
         # Ball(10, tower_width * pos_x + left + 25, tower_height * pos_y + top + 25, naprovlenie)
         bul_pos.append([tower_width * pos_x + left + 25, tower_height * pos_y + top + 25])
         sounds.z_tower()
         sounds.play()
+
+    def povorot1(self, deg):
+        if self.povor1 and self.povor2:
+            self.image = pygame.transform.rotate(self.image, deg)
+            self.povor1 = False
+
+    def povorot2(self, deg):
+        if self.povor2:
+            self.image = pygame.transform.rotate(tower_image2, deg)
+            self.povor2 = False
+
+    def sbros(self):
+        self.image = tower_image2
+        self.povor1 = True
+        self.povor2 = True
 
 stoimost = 0
 provershit_naprav_bossa = 0
@@ -747,7 +782,7 @@ class Board:
                 if self.board[y][x] == 3:
                     print(2)
                     self.chckr[f"{y}{x}"].kill()
-                    Tower_up(x, y, self.left, self.top)
+                    self.chckr[f"{y}{x}"] = Tower_up(x, y, self.left, self.top)
                     self.board[y][x] += 1
         shrift = pygame.font.Font(None, 60)
         nanesenniy_shrift = shrift.render(str(self.schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
@@ -808,6 +843,7 @@ provershit_konca_pervoy_volni = False
 provershit_konca_vtoroy_volni = False
 provershit_nachala_vtoroy_volni = False
 bool_2wawe = True
+bol_chst = True
 while True:
     for en in enemy_group:
         if en.c == 1 and naprovlenie == 0:
@@ -923,13 +959,17 @@ while True:
                     Ball(10, x * board.cell_size + board.left, y * board.cell_size + board.top, naprovlenie)
                     sounds.z_bullet()
                     sounds.play()
-
+            if naprovlenie == 1:
+                if f"{y}{x}" in board.chckr.keys():
+                    board.chckr[f"{y}{x}"].povorot1(270)
+            if naprovlenie == 2:
+                if f"{y}{x}" in board.chckr.keys():
+                    board.chckr[f"{y}{x}"].povorot2(180)
 
     if player.health <= 0:
         pygame.display.quit()
         call(['python', 'game_over.py'])
         terminate()
-
 
 
     # отрисовка
@@ -938,8 +978,13 @@ while True:
     player.draw()
     bullets.draw(screen)
 
+
     if provershit_nachala_vtoroy_volni:
-        naprovlenie = 0
+        # naprovlenie = 0
+        if bol_chst:
+            for i in tower_group:
+                i.sbros()
+            bol_chst = False
         if bool_2wawe:
             naprovlenie = 0
             bool_2wawe = False
