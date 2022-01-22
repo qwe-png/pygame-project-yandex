@@ -8,7 +8,7 @@ import sounds
 from time import sleep
 from subprocess import Popen, run, call
 
-
+pygame.font.init()
 schetchik_ochkov_dlya_pokupki_bashen = 10
 randomazer = randint(0, 4)
 provershit = 10
@@ -45,6 +45,15 @@ perviy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replac
 vtoroy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[1])
 tretiy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[2])
 samo_pole_csv.close()
+pont = pygame.font.SysFont('Comic Sans MS', 30)
+ubito_vragov1 = pont.render('Убито Врагов: 15', False, (255, 0, 0))
+zarabotano_deneg1 = pont.render('Заработано денег: 210', False, (255, 0, 0))
+ubito_vragov2 = pont.render('Убито Врагов: 33', False, (255, 0, 0))
+zarabotano_deneg2 = pont.render('Заработано денег: 600', False, (255, 0, 0))
+
+
+
+
 
 def terminate():
     # выход
@@ -168,6 +177,7 @@ fon_7 = load_image('smenniy_fon7.jpg')
 fon_8 = load_image('smenniy_fon8.jpg')
 fon_9 = load_image('smenniy_fon9.jpg')
 fon_10 = load_image('smenniy_fon10.jpg')
+black_image = load_image('fon.jpg')
 fon_black = load_image('smenniy_fon_black.jpg')
 fon_red = load_image('smenniy_fon_red.jpg')
 fon_white = load_image('smenniy_fon_white.jpg')
@@ -189,6 +199,7 @@ stage_1_complete_image = load_image('stage_1_complete.png')
 stage_2_complete_image = load_image('stage_2_complete.png')
 continue_sprite = load_image('continue.png')
 menu_viigrisha_image = load_image('menu_viigrisha.png')
+
 
 
 class Player:
@@ -227,7 +238,9 @@ class Player:
             screen.blit(pustoe_serdce_image, (107, 600))
             screen.blit(pustoe_serdce_image, (130, 600))
 
+
 vsego_deneg = 100
+
 
 class Enemy5(pygame.sprite.Sprite):
     def __init__(self):
@@ -236,7 +249,7 @@ class Enemy5(pygame.sprite.Sprite):
         self.image = enemy5_image
         self.image_copy = enemy5_image
         self.x = 10
-        self.y = 720
+        self.y = 498
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(
             self.x, self.y)
@@ -298,7 +311,7 @@ class Enemy4(pygame.sprite.Sprite):
         self.image = enemy4_image
         self.image_copy = enemy4_image
         self.x = 10
-        self.y = 720
+        self.y = 498
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(
             self.x, self.y)
@@ -360,13 +373,13 @@ class Enemy3(pygame.sprite.Sprite):
         self.image = enemy3_image
         self.image_copy = enemy3_image
         self.x = 10
-        self.y = 720
+        self.y = 498
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(
             self.x, self.y)
         liv = True
         self.level = 0
-        self.health = 8
+        self.health = 5
         self.speed = 180
 
         self.c = 0
@@ -422,7 +435,7 @@ class Enemy2(pygame.sprite.Sprite):
         self.image = enemy2_image
         self.image_copy = enemy2_image
         self.x = 10
-        self.y = 720
+        self.y = 498
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(
             self.x, self.y)
@@ -484,7 +497,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = enemy_image
         self.image_copy = enemy_image
         self.x = 10
-        self.y = 720
+        self.y = 498
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(
             self.x, self.y)
@@ -537,6 +550,9 @@ class Enemy(pygame.sprite.Sprite):
         # звук
         sounds.z_enemy()
         sounds.play()
+
+
+
 
 
 class Ball(pygame.sprite.Sprite):
@@ -789,7 +805,6 @@ class Board:
         endsrift = nanesenniy_shrift.get_rect()
         endsrift.center = (300, 525)
         screen.blit(nanesenniy_shrift, endsrift)
-        screen.blit(mesto_spavna_image, (-20, 515))
 
 
     def get_cell(self, mouse_pos):
@@ -888,32 +903,33 @@ while True:
                 terminate()
 
     board.render(screen)
-    if not schetchik_vragov_pervoy_volni > 425:
-        schetchik_vragov_pervoy_volni += 1
+    if slozhnost == '0':
+        if not schetchik_vragov_pervoy_volni > 425:
+            schetchik_vragov_pervoy_volni += 1
 
-    if schetchik_vragov_pervoy_volni % 45 == 0 and schetchik_vragov_pervoy_volni:
-        Enemy()
-    if schetchik_vragov_pervoy_volni % 75 == 0:
-        Enemy2()
-    if schetchik_vragov_pervoy_volni % 250 == 0:
-        Enemy3()
-    if vsego_deneg == 210 and not provershit_nachala_vtoroy_volni:
-        provershit_konca_pervoy_volni = True
-    if vsego_deneg == 600:
-        provershit_konca_vtoroy_volni = True
-    if vsego_deneg > 210: provershit_konca_pervoy_volni = False
-    if provershit_konca_pervoy_volni:
-        naprovlenie = 0
-        if not prozrachnost > 255:
-            prozrachnost += 1
-            stage_1_complete_image.set_alpha(prozrachnost)
-            continue_sprite.set_alpha(prozrachnost)
-    if provershit_konca_vtoroy_volni:
-        naprovlenie = 0
-        if not prozrachnost2 > 255:
-            prozrachnost2 += 1
-            stage_2_complete_image.set_alpha(prozrachnost2)
-            menu_viigrisha_image.set_alpha(prozrachnost2)
+        if schetchik_vragov_pervoy_volni % 45 == 0 and schetchik_vragov_pervoy_volni:
+            Enemy()
+        if schetchik_vragov_pervoy_volni % 75 == 0:
+            Enemy2()
+        if schetchik_vragov_pervoy_volni % 250 == 0:
+            Enemy3()
+        if vsego_deneg == 210 and not provershit_nachala_vtoroy_volni:
+            provershit_konca_pervoy_volni = True
+        if vsego_deneg == 600:
+            provershit_konca_vtoroy_volni = True
+        if vsego_deneg > 210: provershit_konca_pervoy_volni = False
+        if provershit_konca_pervoy_volni:
+            naprovlenie = 0
+            if not prozrachnost > 255:
+                prozrachnost += 1
+                stage_1_complete_image.set_alpha(prozrachnost)
+                continue_sprite.set_alpha(prozrachnost)
+        if provershit_konca_vtoroy_volni:
+            naprovlenie = 0
+            if not prozrachnost2 > 255:
+                prozrachnost2 += 1
+                stage_2_complete_image.set_alpha(prozrachnost2)
+                menu_viigrisha_image.set_alpha(prozrachnost2)
     stoimost += 1
     if stoimost < 10:
         cena = 0
@@ -996,12 +1012,24 @@ while True:
                 Enemy4()
             if schetchik_vragov_vtoroy_volni % 200 == 0 and schetchik_vragov_vtoroy_volni > 399:
                 Enemy5()
+    screen.blit(mesto_spavna_image, (-20, 515))
+    potracheno_deneg = pont.render(f'Потрачено денег: {vsego_deneg - player.points}', False, (255, 0, 0))
+
     if provershit_konca_pervoy_volni:
+        screen.blit(black_image, (0, -400))
         screen.blit(stage_1_complete_image, (0, 150))
+        screen.blit(ubito_vragov1, (0, 0))
+        screen.blit(zarabotano_deneg1, (0, 30))
+        screen.blit(potracheno_deneg, (0, 60))
         screen.blit(continue_sprite, (420, -20))
     if provershit_konca_vtoroy_volni:
         screen.blit(stage_2_complete_image, (0, 150))
+        screen.blit(black_image, (0, 0))
+        screen.blit(ubito_vragov2, (0, 0))
+        screen.blit(zarabotano_deneg2, (0, 30))
+        screen.blit(potracheno_deneg, (0, 60))
         screen.blit(menu_viigrisha_image, (165, 379))
+
     # обновление
     bullets.update()
     enemy_group.update(fps)
