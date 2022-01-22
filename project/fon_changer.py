@@ -93,6 +93,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.display.quit()
+                call(['python', 'store.py'])
+                terminate()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 815 < int(event.pos[0]) < 879 and 286 < int(event.pos[1]) < 316:
@@ -107,7 +112,7 @@ while running:
                     provershit = 10
                     proverka_monotonnosti = True
                 else:
-                    provershit = open('csv_data/background_nomer.csv', encoding='utf8').read()
+                    provershit = 1
                     provershit = int(provershit)
                     proverka_monotonnosti = False
             if 144 < int(event.pos[0]) < 561 and 580 < int(event.pos[1]) < 654:

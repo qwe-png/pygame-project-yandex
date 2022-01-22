@@ -602,7 +602,7 @@ prozrachnost2 = 0
 class Board:
     # создание поля
     def __init__(self, width, height):
-        self.schetchik_ochkov_dlya_pokupki_bashen = 0
+        self.schetchik_ochkov_dlya_pokupki_bashen = 10
         self.price = 10
         self.width = width
         self.height = height
@@ -734,7 +734,7 @@ class Board:
                                      (x * cs + self.left + 1, y * cs + self.top + 1, cs - 1, cs - 1))
 
 
-                if player.points + 10 >= self.price:
+                if player.points >= self.price:
                     pygame.draw.rect(screen, pygame.Color(210, 210, 0), (250, 500, 100, 60))
                 else:
                     pygame.draw.rect(screen, pygame.Color(100, 100, 100), (250, 500, 100, 60))
@@ -847,13 +847,9 @@ while True:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                running = True
-                # пауза
-                while running:
-                    for event in pygame.event.get():
-                        if event.type == pygame.KEYDOWN:
-                            if event.key == pygame.K_ESCAPE:
-                                running = False
+                pygame.display.quit()
+                call(['python', 'map.py'])
+                terminate()
 
     board.render(screen)
     if not schetchik_vragov_pervoy_volni > 425:

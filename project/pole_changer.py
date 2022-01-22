@@ -56,6 +56,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.display.quit()
+                call(['python', 'store.py'])
+                terminate()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
             if 665 < int(event.pos[0]) < 725 and 286 < int(event.pos[1]) < 316:
