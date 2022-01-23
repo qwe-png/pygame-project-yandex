@@ -46,10 +46,10 @@ vtoroy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replac
 tretiy_vtorogo = int(pole_zipper[int(nomer_pole_csv)][1].replace('(', '').replace(')', '').split(',')[2])
 samo_pole_csv.close()
 pont = pygame.font.SysFont('Comic Sans MS', 30)
-ubito_vragov1 = pont.render('Убито Врагов: 15', False, (255, 0, 0))
-zarabotano_deneg1 = pont.render('Заработано денег: 210', False, (255, 0, 0))
-ubito_vragov2 = pont.render('Убито Врагов: 33', False, (255, 0, 0))
-zarabotano_deneg2 = pont.render('Заработано денег: 600', False, (255, 0, 0))
+ubito_vragov1 = pont.render('Убито Врагов: 15', True, (255, 0, 0))
+zarabotano_deneg1 = pont.render('Заработано денег: 210', True, (0, 255, 255))
+ubito_vragov2 = pont.render('Убито Врагов: 33', True, (255, 0, 0))
+zarabotano_deneg2 = pont.render('Заработано денег: 600', True, (0, 255, 255))
 
 
 
@@ -195,6 +195,7 @@ image_sprite_boss_vpered = [pygame.image.load("data/boss_tuda1.png"),
                             pygame.image.load("data/boss_tuda2.png"),
                             pygame.image.load("data/boss_tuda3.png"),
                             pygame.image.load("data/boss_tuda4.png")]
+pobeda_image = load_image('pobeda.png')
 stage_1_complete_image = load_image('stage_1_complete.png')
 stage_2_complete_image = load_image('stage_2_complete.png')
 continue_sprite = load_image('continue.png')
@@ -204,7 +205,10 @@ menu_viigrisha_image = load_image('menu_viigrisha.png')
 
 class Player:
     def __init__(self):
-        self.health = 3
+        if slozhnost == '0':
+            self.health = 3
+        elif slozhnost == '1':
+            self.health = 1
         self.points = 100
 
     def draw(self):
@@ -551,7 +555,107 @@ class Enemy(pygame.sprite.Sprite):
         sounds.z_enemy()
         sounds.play()
 
+boss_health = 0
+class Boss(pygame.sprite.Sprite):
+    def __init__(self):
+        global schetchik_kolichestva_serdec, liv, provershit_naprav_bossa, boss_health
+        super().__init__(boss, enemy_group, all_sprites)
+        self.an = 0
+        self.image = image_sprite_boss_vpered[0]
+        self.image_copy = image_sprite_boss_vpered[0]
+        self.x = 10
+        self.y = 498
+        self.rect = self.image.get_rect()
+        self.rect = self.rect.move(
+            self.x, self.y)
+        liv = True
+        self.level = 0
+        self.health = 40
+        hp = pont.render(str(self.health), False, (0, 255, 255))
+        screen.blit(hp, (0, 400))
+        self.speed = 60
+        self.cena = 0
 
+        self.c = 0
+
+    def update(self, *args):
+        global naprovlenie, liv, boss_health
+        self.x = self.rect.left
+        self.y = self.rect.top
+        if self.health <= 0:
+            self.killed()
+        if self.an < 10:
+            self.cena = 0
+        elif 10 < self.an < 20:
+            self.cena = 1
+        elif 20 < self.an < 30:
+            self.cena = 2
+        elif 30 < self.an < 40:
+            self.cena = 3
+        if self.an == 45:
+            self.an = 0
+            cena = 0
+        if self.c == 0:
+            self.image = image_sprite_boss_vpered[self.cena]
+            self.image_copy = image_sprite_boss_vpered[self.cena]
+        if self.c == 1:
+            self.image = image_sprite_boss_napravo[self.cena]
+            self.image_copy = image_sprite_boss_napravo[self.cena]
+        if self.c == 2:
+            self.image = image_sprite_boss_nazad[self.cena]
+            self.image_copy = image_sprite_boss_nazad[self.cena]
+        if self.x == 10 and self.y > 10:
+            self.rect = self.rect.move(0, -self.speed / args[0])
+        elif (self.x >= 10) and (self.x <= 530) and (self.y <= 10):
+            if self.c == 0:
+                self.image = pygame.transform.rotate(self.image, 270)
+                self.c = 1
+            self.rect = self.rect.move(self.speed / args[0], 0)
+        elif (self.x >= 530 and self.y >= 9) and self.y <= 700:
+            if self.c == 1:
+                self.image = pygame.transform.rotate(self.image_copy, 180)
+                self.c = 2
+            self.rect = self.rect.move(0, self.speed / args[0])
+        else:
+            self.end()
+        self.an += 1
+        #if boss_move_x == 0 and boss_move_y > 0:
+        # #    boss_move_x = 0
+        # #    boss_move_y -= 0.4
+        #    provershit_naprav_bossa = 0
+        # #elif 522 > boss_move_x >= 0 and boss_move_y <= 0:
+        # #    boss_move_x += 0.4
+        #     boss_move_y = 0
+        #     provershit_naprav_bossa = 1
+        # elif 522 <= boss_move_x and 522 > boss_move_y >= 0:
+        #     boss_move_x = 522
+        #     boss_move_y += 0.4
+        #     provershit_naprav_bossa = 2
+        boss_health = str(self.health)
+
+    def end(self):
+        global liv, vsego_deneg, boss_health
+        liv = False
+        self.kill()
+        player.health -= 3
+        player.points += 5
+        vsego_deneg += 5
+
+        sounds.enemy_end()
+        sounds.play()
+        boss_health = str(self.health)
+
+    def killed(self):
+        global liv, vsego_deneg, boss_health
+        liv = False
+        self.kill()
+        player.points += 5
+        vsego_deneg += 5
+
+        # звук
+        sounds.z_enemy()
+        sounds.play()
+        boss_health = str(self.health)
 
 
 
@@ -574,6 +678,7 @@ class Ball(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, enemy_group):
             for s in pygame.sprite.spritecollide(self, enemy_group, dokill=False):
                 s.health -= 1
+
             self.kill()
         if self.rect.left == 0:
             self.kill()
@@ -650,6 +755,7 @@ stoimost = 0
 provershit_naprav_bossa = 0
 prozrachnost = 0
 prozrachnost2 = 0
+xan = 0
 class Board:
     # создание поля
     def __init__(self, width, height):
@@ -757,13 +863,13 @@ class Board:
                 screen.blit(rotated_wall4_image, (501, schetchik_kolichestva_stenok))
                 screen.blit(wall4_image, (schetchik_kolichestva_stenok, 501))
                 schetchik_kolichestva_stenok += 37
-        if slozhnost == '1':
-            if provershit_naprav_bossa == 0:
-                screen.blit(image_sprite_boss_vpered[cena], (boss_move_x, boss_move_y))
-            elif provershit_naprav_bossa == 1:
-                screen.blit(image_sprite_boss_napravo[cena], (boss_move_x, boss_move_y))
-            elif provershit_naprav_bossa == 2:
-                screen.blit(image_sprite_boss_nazad[cena], (boss_move_x, boss_move_y))
+        #if slozhnost == '1':
+            # if provershit_naprav_bossa == 0:
+                 #screen.blit(image_sprite_boss_vpered[cena], (boss_move_x, boss_move_y))
+            # elif provershit_naprav_bossa == 1:
+            #     screen.blit(image_sprite_boss_napravo[cena], (boss_move_x, boss_move_y))
+            # elif provershit_naprav_bossa == 2:
+            #     screen.blit(image_sprite_boss_nazad[cena], (boss_move_x, boss_move_y))
 
         shrift = pygame.font.Font(None, 60)
         nanesenniy_shrift = shrift.render(str(self.schetchik_ochkov_dlya_pokupki_bashen), True, (255, 0, 0))
@@ -805,7 +911,11 @@ class Board:
         endsrift = nanesenniy_shrift.get_rect()
         endsrift.center = (300, 525)
         screen.blit(nanesenniy_shrift, endsrift)
-
+        if slozhnost == '1':
+            pygame.draw.rect(screen, pygame.Color(33, 50, 63), (0, 650, 100, 60))
+            boss_health_nadpis = pont.render(str(boss_health), True, (0, 255, 255))
+            screen.blit(boss_health_nadpis, (0, 650))
+            screen.blit(celoe_serdce_image, (38, 670))
 
     def get_cell(self, mouse_pos):
         x = math.ceil((mouse_pos[0] - self.left) / self.cell_size) - 1
@@ -859,6 +969,8 @@ provershit_konca_vtoroy_volni = False
 provershit_nachala_vtoroy_volni = False
 bool_2wawe = True
 bol_chst = True
+pobeda_provershit = False
+prizrachnost = 0
 while True:
     for en in enemy_group:
         if en.c == 1 and naprovlenie == 0:
@@ -889,6 +1001,19 @@ while True:
                 pygame.display.quit()
                 call(['python', 'main.py'])
                 terminate()
+            if pobeda_provershit and 126 < int(event.pos[0]) <= 236 and 378 <= int(event.pos[1]) < 430:
+                pygame.display.quit()
+                call(['python', 'main_menu.py'])
+                terminate()
+            if pobeda_provershit and 254 < int(event.pos[0]) <= 356 and 372 <= int(event.pos[1]) < 429:
+                pygame.display.quit()
+                call(['python', 'main.py'])
+                terminate()
+            if pobeda_provershit and 441 < int(event.pos[0]) <= 473 and 197 <= int(event.pos[1]) < 226:
+                pygame.display.quit()
+                call(['python', 'map.py'])
+                terminate()
+
         if event.type == pygame.MOUSEMOTION:
             if 250 <= int(event.pos[0]) <= 350 and 500 <= int(event.pos[1]) <= 550:
                 provershit = True
@@ -901,7 +1026,7 @@ while True:
                 pygame.display.quit()
                 call(['python', 'map.py'])
                 terminate()
-
+    potracheno_deneg = pont.render(f'Потрачено денег: {vsego_deneg - player.points}', True, (0, 255, 255))
     board.render(screen)
     if slozhnost == '0':
         if not schetchik_vragov_pervoy_volni > 425:
@@ -920,40 +1045,45 @@ while True:
         if vsego_deneg > 210: provershit_konca_pervoy_volni = False
         if provershit_konca_pervoy_volni:
             naprovlenie = 0
+
             if not prozrachnost > 255:
                 prozrachnost += 1
                 stage_1_complete_image.set_alpha(prozrachnost)
                 continue_sprite.set_alpha(prozrachnost)
+                black_image.set_alpha(prozrachnost)
+                ubito_vragov1.set_alpha(prozrachnost)
+                zarabotano_deneg1.set_alpha(prozrachnost)
+                potracheno_deneg.set_alpha(prozrachnost)
         if provershit_konca_vtoroy_volni:
             naprovlenie = 0
             if not prozrachnost2 > 255:
                 prozrachnost2 += 1
                 stage_2_complete_image.set_alpha(prozrachnost2)
                 menu_viigrisha_image.set_alpha(prozrachnost2)
-    stoimost += 1
-    if stoimost < 10:
-        cena = 0
-    elif 10 < stoimost < 20:
-        cena = 1
-    elif 20 < stoimost < 30:
-        cena = 2
-    elif 30 < stoimost < 40:
-        cena = 3
-    if stoimost == 45:
-        stoimost = 0
-        cena = 0
-    if boss_move_x == 0 and boss_move_y > 0:
-        boss_move_x = 0
-        boss_move_y -= 0.4
-        provershit_naprav_bossa = 0
-    elif 522 > boss_move_x >= 0 and boss_move_y <= 0:
-        boss_move_x += 0.4
-        boss_move_y = 0
-        provershit_naprav_bossa = 1
-    elif 522 <= boss_move_x and 522 > boss_move_y >= 0:
-        boss_move_x = 522
-        boss_move_y += 0.4
-        provershit_naprav_bossa = 2
+                black_image.set_alpha(prozrachnost2)
+                potracheno_deneg.set_alpha(prozrachnost2)
+                ubito_vragov2.set_alpha(prozrachnost2)
+                zarabotano_deneg2.set_alpha(prozrachnost2)
+
+    if pobeda_provershit:
+        if not prizrachnost > 255:
+            prizrachnost += 1
+            pobeda_image.set_alpha(prizrachnost)
+    xan += 1
+    if stoimost == 0:
+        if slozhnost == '1':
+            stoimost += 1
+            if stoimost == 1:
+                Boss()
+    if xan % 50 == 0 and not pobeda_provershit and slozhnost == '1':
+        player.points += 15
+        vsego_deneg += 15
+    if int(boss_health) - 0 <= 0 and xan > 5 and slozhnost == '1':
+        pobeda_provershit = True
+    else:
+        pobeda_provershit = False
+
+
 
 
     c += 1
@@ -993,6 +1123,7 @@ while True:
     enemy_group.draw(screen)
     player.draw()
     bullets.draw(screen)
+    boss.draw(screen)
 
 
     if provershit_nachala_vtoroy_volni:
@@ -1013,7 +1144,6 @@ while True:
             if schetchik_vragov_vtoroy_volni % 200 == 0 and schetchik_vragov_vtoroy_volni > 399:
                 Enemy5()
     screen.blit(mesto_spavna_image, (-20, 515))
-    potracheno_deneg = pont.render(f'Потрачено денег: {vsego_deneg - player.points}', False, (255, 0, 0))
 
     if provershit_konca_pervoy_volni:
         screen.blit(black_image, (0, -400))
@@ -1023,13 +1153,15 @@ while True:
         screen.blit(potracheno_deneg, (0, 60))
         screen.blit(continue_sprite, (420, -20))
     if provershit_konca_vtoroy_volni:
-        screen.blit(stage_2_complete_image, (0, 150))
-        screen.blit(black_image, (0, 0))
+        screen.blit(black_image, (0, -400))
         screen.blit(ubito_vragov2, (0, 0))
         screen.blit(zarabotano_deneg2, (0, 30))
         screen.blit(potracheno_deneg, (0, 60))
+        screen.blit(stage_2_complete_image, (0, 150))
         screen.blit(menu_viigrisha_image, (165, 379))
-
+    if pobeda_provershit is True:
+        pobeda_image.set_alpha(prizrachnost)
+        screen.blit(pobeda_image, (109, 180))
     # обновление
     bullets.update()
     enemy_group.update(fps)
